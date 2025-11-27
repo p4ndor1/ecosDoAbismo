@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel de Migração // ECOS DO ABISMO</title>
+    <style>
+        body { background: #050505; color: #0f0; font-family: monospace; padding: 50px; text-align: center; }
+        h1 { border-bottom: 1px dashed #0f0; padding-bottom: 10px; display: inline-block; }
+        button { margin-top: 30px; padding: 20px 40px; font-size: 20px; cursor: pointer; background: #0f0; color: #000; border: none; font-weight: bold; text-transform: uppercase; }
+        button:hover { background: #fff; }
+        #status { margin-top: 30px; white-space: pre-wrap; text-align: left; border: 1px solid #333; padding: 20px; background: #111; min-height: 200px; }
+    </style>
+</head>
+<body>
+    <h1>MIGRAÇÃO DE DADOS: LOCAL -> FIREBASE</h1>
+    <p>Certifique-se que o servidor Python está rodando.</p>
+    
+    <button onclick="iniciarMigracao()">INICIAR UPLOAD AGORA</button>
+    
+    <div id="status">Aguardando comando...</div>
+
+    <script src="db.js"></script>
+    
+    <script type="module">
+        // Importa as ferramentas do Firebase
+        import { db, collection, addDoc } from './firebase-config.js';
+
+        // Torna a função global para o botão funcionar
+        window.iniciarMigracao = async function() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = ">>> INICIANDO PROTOCOLO DE UPLOAD...\n";
+
+            // Verifica se o db.js carregou
+            if (typeof postsDatabase === 'undefined' || postsDatabase.length === 0) {
+                statusDiv.innerHTML += "[ERRO CRÍTICO]: db.js não encontrado ou vazio.\n";
+                return;
+            }
+
+            let contador = 0;
+
+            // Loop para enviar cada post
+            for (const post of postsDatabase) {
+                try {
+                    statusDiv.innerHTML += `> Enviando arquivo: [${post.titulo}]... `;
+                    
+                    // O COMANDO QUE GRAVA NO BANCO:
+                    await addDoc(collection(db, "posts"), {
+                        titulo: post.titulo,
+                        resumo: post.resumo,
+                        categoria: post.categoria,
+                        data: post.data,
+                        imagem: post.imagem, // Certifique-se que no db.js está '../img/...'
+                        link: post.link,     // Certifique-se que no db.js está '../posts/...'
+                        timestamp: new Date() // Para ordenar por data real de criação
+                    });
+
+                    statusDiv.innerHTML += "OK (Salvo na nuvem)\n";
+                    contador++;
+                } catch (e) {
+                    statusDiv.innerHTML += `FALHA: ${e.message}\n`;
+                    console.error(e);
+                }
+            }
+
+            statusDiv.innerHTML += `\n>>> SUCESSO: ${contador} ARQUIVOS TRANSFERIDOS PARA O FIREBASE.`;
+            statusDiv.innerHTML += `\n>>> Agora você pode apagar o db.js (mas guarde um backup).`;
+        }
+    </script>
+</body>
+</html>

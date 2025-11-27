@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carregando Arquivo... // ECOS DO ABISMO</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+    <meta name="page-category" content="">
+</head>
+<body>
+    <div class="scanlines"></div>
+
+    <div class="interface-container">
+        <header class="main-header border-double">
+            <div class="header-meta"><span>VOL. 666</span><span>LEITURA.EXE</span></div>
+            <h1 class="glitch-title"><a href="index.html" style="color:inherit; text-decoration:none;">Ecos do Abismo</a></h1>
+            <div class="header-meta"><span>SAO.PAULO</span><span>[REC]</span></div>
+        </header>
+
+        <nav class="main-nav border-simple">
+            <a href="index.html" class="nav-item">:: INÍCIO</a>
+            <div class="nav-item dropdown">
+                <a href="pages/biblioteca.html" class="dropbtn">:: BIBLIOTECA</a>
+                <div class="dropdown-content">
+                    <a href="pages/livros.html">Livros</a>
+                    <a href="pages/filmes.html">Filmes</a>
+                    <a href="pages/jogos.html">Jogos</a>
+                </div>
+            </div>
+            <a href="pages/crimes.html" class="nav-item">:: CRIMES REAIS</a>
+            <a href="pages/darkweb.html" class="nav-item">:: DARK WEB</a>
+            <a href="pages/assombracoes.html" class="nav-item">:: ASSOMBRAÇÕES</a>
+        </nav>
+
+        <main class="main-content">
+            <aside class="sidebar border-simple">
+                <div class="ad-placeholder"><span>[ ESPAÇO PUBLICITÁRIO ]</span><small>Google Adsense</small></div>
+                
+                <div id="recent-posts-sidebar" style="margin-top: 30px;"></div>
+                
+                <div class="ad-placeholder skyscraper"><span>[ ESPAÇO PUBLICITÁRIO ]</span><small>Vertical</small></div>
+            </aside>
+
+            <article class="hero-section border-simple" style="display: block; text-align: left;">
+                
+                <div id="loading-msg" class="terminal-text blink">BAIXANDO DADOS DO SERVIDOR...</div>
+                
+                <div id="post-content" style="display: none;">
+                    <header class="post-header">
+                        <p class="separator" id="p-meta">ARQUIVO: #CARREGANDO</p>
+                        <h1 class="gothic-sub" id="p-titulo"></h1>
+                        <p class="header-meta">DATA: <span id="p-data"></span> | AUTOR: DESCONHECIDO</p>
+                        <div class="separator">-----------------------------</div>
+                    </header>
+
+                    <figure class="post-feature-image">
+                        <img id="p-imagem" src="" alt="">
+                        <figcaption>FIG. 1: Registro Visual.</figcaption>
+                    </figure>
+                    <div class="separator">-----------------------------</div>
+
+                    <div class="post-body terminal-text" id="p-texto">
+                        </div>
+
+                    <div class="separator" style="margin-top: 30px;">-----------------------------</div>
+
+                    <div class="comments-section border-simple" style="margin-top: 40px; padding: 20px;">
+                        <h3 class="gothic-sub" style="font-size: 2rem;">Registros da Comunidade</h3>
+                        <div id="comments-list" class="terminal-text"><p>Carregando transmissões...</p></div>
+                        <div class="separator">-----------------------------</div>
+                        <form id="comment-form" class="retro-form" style="flex-direction: column;">
+                            <input type="text" id="user-name" placeholder="CODENAME // SEU NOME" required style="width: 100%;">
+                            <textarea id="user-msg" rows="3" placeholder="MENSAGEM..." required style="width: 100%; background: transparent; border: 2px solid var(--dim-color); color: var(--main-color); font-family: var(--font-term); padding: 10px; margin-top: 10px;"></textarea>
+                            <button type="submit" style="margin-top: 10px;">ENVIAR</button>
+                        </form>
+                    </div>
+
+                    <a href="index.html" class="btn-retro" style="font-size: 1.2rem;">&lt; VOLTAR AO MENU</a>
+                </div>
+            </article>
+        </main>
+
+        <footer class="main-footer border-double">
+            <div class="footer-logo">ECOS_DO_ABISMO © 2025</div>
+        </footer>
+    </div>
+
+    <script type="module">
+        import { db, doc, getDoc, collection, addDoc, getDocs, query, orderBy } from './firebase-config.js';
+        
+        // Importa o script lateral para preencher a sidebar de recomendados
+        import './script.js'; 
+
+        const params = new URLSearchParams(window.location.search);
+        const postID = params.get('id'); // Pega o ID da URL (?id=XYZ)
+
+        if (!postID) {
+            document.getElementById('loading-msg').innerText = "ERRO 404: ARQUIVO NÃO ESPECIFICADO.";
+        } else {
+            carregarPost();
+        }
+
+        async function carregarPost() {
+            try {
+                // Busca o documento no Firebase pelo ID
+                const docRef = doc(db, "posts", postID);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+
+                    // Preenche a tela
+                    document.title = data.titulo + " // ECOS";
+                    document.getElementById('p-titulo').innerText = data.titulo;
+                    document.getElementById('p-data').innerText = data.data;
+                    document.getElementById('p-meta').innerText = `ARQUIVO: #${postID.slice(0,4).toUpperCase()} // CATEGORIA: ${data.categoria.toUpperCase()}`;
+                    document.getElementById('p-imagem').src = data.imagem;
+                    
+                    // IMPORTANTE: O texto precisa estar no banco. Se não tiver, coloca um aviso.
+                    // DICA: No futuro, você vai editar o texto direto no Firebase num campo chamado 'conteudo'
+                    // Como na migração não enviamos o texto completo (só resumo), vou colocar o resumo aqui provisoriamente
+                    // VOCÊ VAI PRECISAR IR NO FIREBASE E COLAR O HTML DOS SEUS TEXTOS NO CAMPO 'conteudo'
+                    document.getElementById('p-texto').innerHTML = data.conteudo || `<p>${data.resumo}</p><p><em>(Conteúdo completo ainda não digitalizado no servidor. Vá no Firebase e adicione um campo 'conteudo' neste post.)</em></p>`;
+
+                    // Atualiza a meta tag para o script.js saber o que recomendar na sidebar
+                    document.querySelector('meta[name="page-category"]').setAttribute("content", data.categoria);
+
+                    // Mostra o post e esconde o loading
+                    document.getElementById('loading-msg').style.display = 'none';
+                    document.getElementById('post-content').style.display = 'block';
+
+                    // Carrega comentários deste ID
+                    carregarComentarios();
+
+                } else {
+                    document.getElementById('loading-msg').innerText = "ERRO 404: ARQUIVO CORROMPIDO OU DELETADO.";
+                }
+            } catch (e) {
+                console.error(e);
+                document.getElementById('loading-msg').innerText = "FALHA DE CONEXÃO.";
+            }
+        }
+
+        // --- SISTEMA DE COMENTÁRIOS (Vinculado ao ID) ---
+        const form = document.getElementById('comment-form');
+        const commentsList = document.getElementById('comments-list');
+
+        async function carregarComentarios() {
+            commentsList.innerHTML = "<p>Buscando...</p>";
+            const q = query(collection(db, "comentarios"), orderBy("data", "desc"));
+            const querySnapshot = await getDocs(q);
+            commentsList.innerHTML = "";
+            let count = 0;
+            querySnapshot.forEach((doc) => {
+                const c = doc.data();
+                if(c.postReferencia === postID) { // Agora compara com o ID do Firebase!
+                    const div = document.createElement('div');
+                    div.style.borderBottom = "1px dashed var(--dim-color)";
+                    div.style.marginBottom = "10px";
+                    div.innerHTML = `<strong style="color:var(--dim-color)">> ${c.nome}</strong>: ${c.mensagem}`;
+                    commentsList.appendChild(div);
+                    count++;
+                }
+            });
+            if(count===0) commentsList.innerHTML = "<p>Sem sinais.</p>";
+        }
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nome = document.getElementById('user-name').value;
+            const msg = document.getElementById('user-msg').value;
+            await addDoc(collection(db, "comentarios"), { nome, mensagem: msg, postReferencia: postID, data: new Date() });
+            form.reset();
+            carregarComentarios();
+        });
+    </script>
+</body>
+</html>

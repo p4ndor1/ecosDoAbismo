@@ -1,13 +1,11 @@
-// Import the functions you need from the SDKs you need
+// firebase-config.js - CORRIGIDO E COMPLETO
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, orderBy, query } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+// AQUI ESTAVA O ERRO: Adicionamos updateDoc e deleteDoc na lista de importação abaixo
+import { getFirestore, collection, addDoc, getDocs, orderBy, query, doc, getDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
+// SUAS CHAVES (Mantenha as suas chaves reais aqui!)
 const firebaseConfig = {
-  apiKey: "AIzaSyAcobGpOt9EUVnZ0BNy3IqEa8zYDWN0yWc",
+  apiKey: "SUA_APIzaSyAcobGpOt9EUVnZ0BNy3IqEa8zYDWN0yWcI_KEY_AQUI", // <--- CUIDADO: Não apague suas chaves reais!
   authDomain: "ecos-do-abismo-v2.firebaseapp.com",
   projectId: "ecos-do-abismo-v2",
   storageBucket: "ecos-do-abismo-v2.firebasestorage.app",
@@ -15,9 +13,9 @@ const firebaseConfig = {
   appId: "1:496053581682:web:c89c46ec355b286da8cfeb"
 };
 
-// Initialize Firebase
+// Inicializa o Firebase
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Exporta para ser usado nos posts
-export { db, collection, addDoc, getDocs, orderBy, query };
+// Exporta TUDO (agora funciona porque importamos tudo lá em cima)
+export { db, collection, addDoc, getDocs, orderBy, query, doc, getDoc, updateDoc, deleteDoc };
