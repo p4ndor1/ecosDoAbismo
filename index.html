@@ -1,226 +1,122 @@
- <html>
-    <head>
-        <meta charset="UTF-8">
-        <meta  name="viewport" content="width=device-width", initial-scale=1.0>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=Libertinus+Mono&family=Limelight&display=swap" rel="stylesheet">
-        <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-        <title>Ecos do Abismo</title>
-        <style>
-            .jacquard-12-regular {
-  font-family: "Jacquard 12", system-ui;
-  font-weight: 100;
-  font-style: normal;
-}
-.limelight-regular {
-  font-family: "Limelight", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-.libertinus-mono-regular {
-  font-family: "Libertinus Mono", monospace;
-  font-weight: 400;
-  font-style: normal;
-}
-.vt323-regular {
-  font-family: "VT323", monospace;
-  font-weight: 400;
-  font-style: normal;
-}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ecos do Abismo // SYSTEM_READY</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=VT323&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="scanlines"></div>
 
-body{
-    background-image: linear-gradient(to right, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.719), rgba(0, 0, 0, 0.438)), url(https://i.pinimg.com/1200x/d6/44/a5/d644a544ef4e38267122c30c80839dbe.jpg);
-    background-color: #00000063;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
-}
-
-a{text-decoration: none;
-color: #BCB8B1;}
-a:hover{color: beige}
-
-nav{width: 100%;
-height: 10%;
-display: flex;
-justify-content: space-evenly;}
-
-#menu{display: flex;
-  width: 80%;
-  height: fit-content;
-  justify-content: space-evenly;;
-outline: 3px groove #BCB8B1;
-margin-top: 3%;
-margin-right:5%;
-/*box-shadow: 5px 5px beige*/;
-}
-
-.menu-item{font-family: 'VT323';
-  font-size: 150% ;
-align-items: center;
-color: #BCB8B1;
-width: fit-content;
-margin-top: 5px;
-padding: 1%;}
-
-.menu-item:hover{color: beige;}
-
-#logo{text-decoration: none;
-  width:fit-content;
-  font-family: "Jacquard 12";
-  font-size: 50px;
-  color: #BCB8B1;
-  margin-left: 5%;
-  margin-top: 1%;
-  margin-right: 5%;
-}
-
-main{
-  height: 70vh;
-margin-left: 5%;;
-margin-right: 5%;
-margin-top: 5%;
-  display: flex; 
-  outline: 3px groove #BCB8B1;
-  border-radius: 16px;
-  padding-left: 5%;
-}
-
-#teste{width:60%}
-
-.title{
-  font-family: "Limelight";
-  font-size: 300%;
-  color: #BCB8B1;
-  margin-right: 5%px;
-  margin-top: 10%;
-}
-
-p{font-family: 'VT323';
-  font-size: 200%;
-color: #BCB8B1;
-padding: 1%;}
-
-/* Estilo geral do footer */
-footer {
-    width: 100%;
-    background-color: transparent; /* A cor de fundo será a do body */
-    color: #BCB8B1;
-    padding: 20px 0;
-    box-sizing: border-box;
-    display: flex; /* Permite alinhar o conteúdo */
-    justify-content: center;
-    text-align: center;
-}
-
-/* Container que divide o footer em colunas */
-.footer-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 90%;
-    max-width: 1200px;
-    outline: 3px groove #BCB8B1; /* Borda retro */
-    padding: 20px;
-}
-
-/* Estilo do logo no footer */
-#logo-footer {
-    font-family: "Jacquard 12";
-    font-size: 50px;
-    color: #BCB8B1;
-    margin-bottom: 20px;
-}
-
-/* Estilo para as colunas */
-.footer-column {
-    flex: 1;
-    padding: 0 20px;
-    text-align: left;
-}
-
-.footer-column h3 {
-    font-family: "Limelight";
-    font-size: 150%;
-    margin-bottom: 10px;
-    text-transform: uppercase;
-}
-
-.footer-column ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.footer-column li {
-    margin-bottom: 5px;
-}
-
-.footer-column a {
-    text-decoration: none;
-    color: #BCB8B1;
-    font-family: "VT323";
-    font-size: 100%;
-    transition: color 0.2s;
-}
-
-.footer-column a:hover {
-    color: beige;
-}
-        </style>
-    </head>
-    <body>
-        <header>
-            <nav>
-                <div id="logo"><a href="#">Ecos do Abismo</a></div>
-                <di id="menu">
-                    <div></div><div class="menu-item"> Biblioteca </div>
-                    <div></div><div class="menu-item">Crimes Reais</div>
-                    <div></div><div class="menu-item">Dark Web</div>
-                    <div class="menu-item">Assombrações</div>
-                </div>     
-            </nav>
-        </header>
-        <main>
-            <div id="teste">
-            <div class="title">Bem vindos à Escuridão!</div>
-            <p>Explore as profundezas do horror através de nossa coleção selecionada de contos arrepiantes, mistérios assombrosos e revelações sombrias.</p>
+    <div class="interface-container">
+        <header class="main-header border-double">
+            <div class="header-meta">
+                <span>VOL. 666</span>
+                <span>SYS.ONLINE</span>
             </div>
+            <h1 class="glitch-title">Ecos do Abismo</h1>
+            <div class="header-meta">
+                <span>SAO.PAULO</span>
+                <span>[REC]</span>
+            </div>
+        </header>
+
+        <nav class="main-nav border-simple">
+            <div class="nav-item dropdown">
+    <a href="pages/biblioteca.html" class="dropbtn">:: BIBLIOTECA</a>
+    <div class="dropdown-content">
+        <a href="pages/livros.html">Livros Malditos</a>
+        <a href="pages/filmes.html">Filmes de Terror</a>
+        <a href="pages/jogos.html">Jogos Obscuros</a>
+    </div>
+</div>
+            <a href="pages/crimes.html" class="nav-item">:: CRIMES REAIS</a>
+            <a href="pages/darkweb.html" class="nav-item">:: DARK WEB</a>
+            <a href="pages/assombrações.html" class="nav-item">:: ASSOMBRAÇÕES</a>
+        </nav>
+
+        <main class="main-content">
+            
+            <aside class="sidebar border-simple">
+                
+                <div class="ad-placeholder">
+                    <span>[ ESPAÇO PUBLICITÁRIO ]</span>
+                    <small>Google Adsense</small>
+                </div>
+
+                <div class="ad-placeholder skyscraper">
+                    <span>[ ESPAÇO PUBLICITÁRIO ]</span>
+                    <small>Vertical</small>
+                </div>
+
+            </aside>
+
+            <section class="hero-section border-simple">
+    <div class="hero-inner">
+        
+        <img src="img/capa-assustadora.png" alt="Uma ilustração assustadora" class="hero-image">
+        
+        <h2 class="gothic-sub">Bem-vindos à Escuridão</h2>
+                    <div class="separator">-----------------------------</div>
+                    <p class="terminal-text">
+                        > Inicializando protocolo de medo...<br>
+                        > Carregando arquivos proibidos...<br>
+                        <br>
+                        Explore as profundezas do horror através de nossa coleção selecionada de contos arrepiantes, mistérios assombrosos e revelações sombrias que a luz do dia tentou esconder.
+                    </p>
+                    <br>
+                    <a href="#" class="btn-retro">[ INICIAR LEITURA ]</a>
+                </div>
+            </section>
         </main>
-            <footer>
-            <div class="footer-container">
-                <div class="footer-logo">
-                    <span id="logo-footer">Ecos do Abismo</span>
+        
+        <section class="newsletter-section border-double">
+            <div class="newsletter-content">
+                <div class="newsletter-text">
+                    <h2 class="gothic-sub" style="font-size: 2.5rem;">Protocolo de Vinculação</h2>
+                    <p class="terminal-text">
+                        Não perca nenhum sinal do abismo. Inscreva seu endereço neural para receber atualizações, contos proibidos e avisos de segurança diretamente no seu terminal.
+                        <br><br>
+                        <small>Ao clicar em "VINCULAR", você aceita que sua alma (e dados) sejam processados.</small>
+                    </p>
+                    
+                    <form class="retro-form">
+                        <input type="email" placeholder="SEU_EMAIL@DIGITAL.COM" required>
+                        <button type="submit">IVINCULAR :: AGORA</button>
+                    </form>
                 </div>
-                <div class="footer-column">
-                    <h3>Informações</h3>
-                    <ul>
-                        <li><a href="#">Sobre Nós</a></li>
-                        <li><a href="#">Contato</a></li>
-                        <li><a href="#">Termos de Uso</a></li>
-                    </ul>
+                
+                <div class="newsletter-image">
+                    <img src="img/vinculo.png" alt="Ritual Digital" class="pixel-art-img">
                 </div>
-                <div class="footer-column">
-                    <h3>Nossas Redes</h3>
-                    <ul>
-                        <li><a href="#">Instagram</a></li>
-                        <li><a href="#">Twitter</a></li>
-                        <li><a href="#">Facebook</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Apoio</h3>
-                    <ul>
-                        <li><a href="#">Parcerias</a></li>
-                        <li><a href="#">Doações</a></li>
-                        <li><a href="#">Recursos</a></li>
-                    </ul>
-                </div>
+            </div>
+        </section>
+
+        <footer class="main-footer border-double">
+            <div class="footer-col">
+                <h3>// PROTOCOLOS</h3>
+                <ul>
+                    <li><a href="#">Sobre Nós</a></li>
+                    <li><a href="#">Termos</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>// CONEXÕES</h3>
+                <ul>
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                </ul>
+            </div>
+            <div class="footer-logo">
+                ECOS_DO_ABISMO © 2025
             </div>
         </footer>
-    </body>
- </html>
+    </div>
+</body>
+</html>
