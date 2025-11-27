@@ -1,13 +1,12 @@
-// script.js - Versão Dinâmica 2.0
-import { db, collection, getDocs, query } from './firebase-config.js';
+// script.js - Versão 3.0 (Com Newsletter)
+import { db, collection, getDocs, query, addDoc } from './firebase-config.js';
 
 // Detector de onde estamos (Raiz ou Pasta Pages?)
 const estouNaPastaPages = window.location.pathname.includes('/pages/');
-const caminhoRaiz = estouNaPastaPages ? '../' : ''; // Se estiver em pages, volta um nível
+const caminhoRaiz = estouNaPastaPages ? '../' : ''; 
 
 // Função Card Pequeno
 function criarCardPequeno(post) {
-    // O link agora aponta sempre para o ver-post.html com o ID do documento
     return `
         <div class="sidebar-card" style="margin-bottom: 15px; border: 1px solid var(--dim-color); padding: 5px;">
             <a href="${caminhoRaiz}ver-post.html?id=${post.id}" style="text-decoration: none; display: flex; gap: 10px; align-items: center;">
@@ -38,42 +37,80 @@ function criarCardGrande(post) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    
+    // --- 1. CARREGAR POSTS (Lógica Antiga) ---
     const categoryTag = document.querySelector('meta[name="page-category"]');
     const sidebarContainer = document.getElementById('recent-posts-sidebar');
     const hubContainer = document.getElementById('category-hub-grid');
 
-    if (!sidebarContainer && !hubContainer && !categoryTag) return;
+    if (sidebarContainer || hubContainer) {
+        try {
+            const q = query(collection(db, "posts")); 
+            const querySnapshot = await getDocs(q);
+            
+            let postsEncontrados = [];
+            querySnapshot.forEach((doc) => {
+                postsEncontrados.push({ id: doc.id, ...doc.data() });
+            });
 
-    try {
-        const q = query(collection(db, "posts")); 
-        const querySnapshot = await getDocs(q);
-        
-        let postsEncontrados = [];
-        querySnapshot.forEach((doc) => {
-            // AQUI ESTÁ O SEGREDO: Pegamos o ID do documento do Firebase
-            postsEncontrados.push({ id: doc.id, ...doc.data() });
-        });
+            if (categoryTag) {
+                const categoriaAtual = categoryTag.content;
+                const postsFiltrados = postsEncontrados.filter(post => post.categoria === categoriaAtual);
 
-        if (categoryTag) {
-            const categoriaAtual = categoryTag.content;
-            const postsFiltrados = postsEncontrados.filter(post => post.categoria === categoriaAtual);
+                if (sidebarContainer) {
+                    sidebarContainer.innerHTML = "<h4 style='border-bottom: 1px dashed var(--dim-color); margin-bottom: 10px;'>// ARQUIVOS RELACIONADOS</h4>";
+                    postsFiltrados.slice(0, 3).forEach(post => {
+                        sidebarContainer.innerHTML += criarCardPequeno(post);
+                    });
+                }
 
-            if (sidebarContainer) {
-                sidebarContainer.innerHTML = "<h4 style='border-bottom: 1px dashed var(--dim-color); margin-bottom: 10px;'>// ARQUIVOS RELACIONADOS</h4>";
-                postsFiltrados.slice(0, 3).forEach(post => {
-                    sidebarContainer.innerHTML += criarCardPequeno(post);
-                });
+                if (hubContainer) {
+                    hubContainer.innerHTML = "";
+                    if(postsFiltrados.length === 0) hubContainer.innerHTML = "<p class='terminal-text'>Nenhum arquivo encontrado.</p>";
+                    postsFiltrados.forEach(post => {
+                        hubContainer.innerHTML += criarCardGrande(post);
+                    });
+                }
             }
-
-            if (hubContainer) {
-                hubContainer.innerHTML = "";
-                if(postsFiltrados.length === 0) hubContainer.innerHTML = "<p class='terminal-text'>Nenhum arquivo encontrado.</p>";
-                postsFiltrados.forEach(post => {
-                    hubContainer.innerHTML += criarCardGrande(post);
-                });
-            }
+        } catch (error) {
+            console.error("Erro ao carregar posts:", error);
         }
-    } catch (error) {
-        console.error("Erro:", error);
+    }
+
+    // --- 2. SISTEMA DE NEWSLETTER (NOVO) ---
+    const newsForm = document.getElementById('newsletter-form');
+    
+    if (newsForm) {
+        newsForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Impede a página de recarregar
+            
+            const emailInput = document.getElementById('newsletter-email');
+            const btn = newsForm.querySelector('button');
+            const textoOriginal = btn.innerText;
+
+            // Feedback visual
+            btn.innerText = "PROCESSANDO...";
+            btn.disabled = true;
+
+            try {
+                const email = emailInput.value;
+                
+                // Salva na coleção 'newsletter'
+                await addDoc(collection(db, "newsletter"), {
+                    email: email,
+                    origem: window.location.pathname, // Saber de onde a pessoa veio
+                    data: new Date()
+                });
+
+                alert("VÍNCULO ESTABELECIDO. AGUARDE NOSSOS SINAIS.");
+                newsForm.reset(); // Limpa o campo
+            } catch (erro) {
+                console.error("Erro newsletter:", erro);
+                alert("FALHA NO VÍNCULO. TENTE NOVAMENTE.");
+            } finally {
+                btn.innerText = textoOriginal;
+                btn.disabled = false;
+            }
+        });
     }
 });
