@@ -543,22 +543,154 @@ figure.post-feature-image figcaption {
 }
 
 /* --- RESPONSIVIDADE DO HERO (Novo) --- */
+/* --- RESPONSIVIDADE GERAL (MOBILE) --- */
 @media (max-width: 768px) {
-    .hub-hero {
-        height: 250px; /* Um pouco menor no celular */
-    }
     
+    /* 1. Ajustes do Hero para Celular */
+    .hub-hero {
+        height: 250px;
+    }
     .hub-overlay {
         padding: 15px;
-        width: 95%; /* Quase a tela toda */
+        width: 95%;
     }
-
     .hub-title {
-        font-size: 2.2rem; /* Reduz drasticamente para caber no celular */
+        font-size: 2.2rem;
         letter-spacing: 1px;
     }
-
     .hub-desc {
         font-size: 1rem;
     }
+
+    /* 2. MENU MOBILE SIMPLIFICADO (Conserta o botão da biblioteca) */
+    .nav-item {
+        width: 100%;
+        text-align: center;
+        border-bottom: 1px solid var(--bg-color);
+        padding: 10px 0; /* Espaço para o dedo */
+    }
+
+    /* O Dropdown vira um bloco simples */
+    .dropdown {
+        display: block;
+        width: 100%;
+        padding: 0;
+        border-bottom: 1px solid var(--bg-color);
+    }
+
+    /* O botão principal do dropdown ocupa tudo */
+    .dropbtn {
+        width: 100%;
+        display: block;
+        padding: 10px 0;
+    }
+
+    /* O conteúdo abre empurrando para baixo */
+    .dropdown-content {
+        position: relative;
+        width: 100%;
+        box-shadow: none;
+        border: none;
+        background-color: rgba(0,0,0,0.2);
+        display: none;
+    }
+    
+    /* Remove bordas duplas nos links internos */
+    .dropdown-content a {
+        border-bottom: 1px dotted var(--dim-color);
+    }
+    
+    /* Faz o menu aparecer ao passar o mouse ou clicar */
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+}
+    }
+/* --- CARROSSEL BIBLIOTECA --- */
+.carousel-section {
+    margin-bottom: 50px;
+    padding: 0 10px;
+}
+
+.carousel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 15px;
+    border-bottom: 2px solid var(--dim-color);
+    padding-bottom: 5px;
+}
+
+.carousel-container {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto; /* Permite scroll horizontal */
+    padding-bottom: 20px; /* Espaço para a barra de rolagem */
+    scroll-behavior: smooth;
+    /* Estilização da barra de rolagem (Firefox) */
+    scrollbar-width: thin;
+    scrollbar-color: var(--main-color) var(--bg-color);
+}
+
+/* Estilização da barra de rolagem (Chrome/Webkit) */
+.carousel-container::-webkit-scrollbar {
+    height: 8px;
+}
+.carousel-container::-webkit-scrollbar-track {
+    background: var(--bg-color);
+}
+.carousel-container::-webkit-scrollbar-thumb {
+    background-color: var(--main-color);
+    border-radius: 4px;
+}
+
+.lib-card {
+    min-width: 200px; /* Tamanho fixo do card */
+    max-width: 200px;
+    border: 1px solid var(--dim-color);
+    padding: 10px;
+    background-color: rgba(59, 46, 37, 0.05);
+    flex-shrink: 0; /* Impede que o card encolha */
+}
+
+.lib-img-box {
+    width: 100%;
+    height: 250px; /* Capa vertical */
+    background: #000;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.lib-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.lib-card h4 {
+    font-family: var(--font-gothic);
+    font-size: 1.2rem;
+    height: 3rem; /* Altura fixa para alinhar */
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.lib-card a {
+    display: block;
+    text-align: center;
+    background: var(--main-color);
+    color: var(--bg-color);
+    text-decoration: none;
+    font-family: var(--font-term);
+    padding: 5px;
+}
+.lib-card a:hover {
+    background: transparent;
+    color: var(--main-color);
+    border: 1px solid var(--main-color);
+}
+
+.btn-retro.is-small {
+    font-size: 1rem;
+    padding: 5px 10px;
 }
