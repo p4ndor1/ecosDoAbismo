@@ -1,5 +1,27 @@
-// script.js - Versão 3.0 (Com Newsletter)
+// script.js - Versão 4.0 (Com Alerta Global)
 import { db, collection, getDocs, query, addDoc } from './firebase-config.js';
+
+// --- FUNÇÃO GLOBAL DE ALERTA (ANEXADA AO WINDOW) ---
+window.mostrarAlerta = function(mensagem, tipo = 'sucesso') {
+    const alerta = document.getElementById('alerta-global');
+    const msg = document.getElementById('alerta-mensagem');
+
+    // Se o elemento não existe, usa alert() de fallback
+    if (!alerta) return alert(mensagem); 
+
+    msg.innerText = mensagem;
+    alerta.classList.remove('erro');
+
+    if (tipo === 'erro') {
+        alerta.classList.add('erro');
+    }
+
+    alerta.classList.add('mostrar');
+
+    setTimeout(() => {
+        alerta.classList.remove('mostrar');
+    }, 5000);
+}
 
 // Detector de onde estamos (Raiz ou Pasta Pages?)
 const estouNaPastaPages = window.location.pathname.includes('/pages/');
@@ -36,30 +58,10 @@ function criarCardGrande(post) {
     `;
 }
 
-// --- FUNÇÃO GLOBAL DE ALERTA (Substitui alert()) ---
-window.mostrarAlerta = function(mensagem, tipo = 'sucesso') {
-    const alerta = document.getElementById('alerta-global');
-    const msg = document.getElementById('alerta-mensagem');
-
-    msg.innerText = mensagem;
-    alerta.classList.remove('erro'); // Limpa estados anteriores
-
-    if (tipo === 'erro') {
-        alerta.classList.add('erro');
-    }
-
-    // Mostra o pop-up
-    alerta.classList.add('mostrar');
-
-    // Esconde automaticamente após 5 segundos
-    setTimeout(() => {
-        alerta.classList.remove('mostrar');
-    }, 5000);
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
     
     // --- 1. CARREGAR POSTS (Lógica Antiga) ---
+    // (Omitido para brevidade, mantendo a lógica de carregamento dos cards nos hubs e sidebar)
     const categoryTag = document.querySelector('meta[name="page-category"]');
     const sidebarContainer = document.getElementById('recent-posts-sidebar');
     const hubContainer = document.getElementById('category-hub-grid');
@@ -98,36 +100,37 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+
     // --- 2. SISTEMA DE NEWSLETTER (NOVO) ---
     const newsForm = document.getElementById('newsletter-form');
     
     if (newsForm) {
         newsForm.addEventListener('submit', async (e) => {
-            e.preventDefault(); // Impede a página de recarregar
+            e.preventDefault(); 
             
             const emailInput = document.getElementById('newsletter-email');
             const btn = newsForm.querySelector('button');
             const textoOriginal = btn.innerText;
 
-            // Feedback visual
             btn.innerText = "PROCESSANDO...";
             btn.disabled = true;
 
             try {
                 const email = emailInput.value;
                 
-                // Salva na coleção 'newsletter'
                 await addDoc(collection(db, "newsletter"), {
                     email: email,
-                    origem: window.location.pathname, // Saber de onde a pessoa veio
+                    origem: window.location.pathname, 
                     data: new Date()
                 });
 
-                alert("VÍNCULO ESTABELECIDO. AGUARDE NOSSOS SINAIS.");
-                newsForm.reset(); // Limpa o campo
+                // AQUI USAMOS A NOVA FUNÇÃO:
+                mostrarAlerta("VÍNCULO ESTABELECIDO. AGUARDE NOSSOS SINAIS.");
+                newsForm.reset(); 
             } catch (erro) {
+                // E AQUI TAMBÉM:
+                mostrarAlerta("FALHA NO VÍNCULO. TENTE NOVAMENTE.", 'erro');
                 console.error("Erro newsletter:", erro);
-                alert("FALHA NO VÍNCULO. TENTE NOVAMENTE.");
             } finally {
                 btn.innerText = textoOriginal;
                 btn.disabled = false;
