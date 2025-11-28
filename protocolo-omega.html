@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CMS 2.0 // ECOS</title>
+    <title>CMS // ACESSO RESTRITO</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
-        /* MANTENHA O CSS ANTIGO - ELE ESTÁ ÓTIMO */
+        /* MANTENHA O CSS ANTIGO */
         :root { --bg-color: #1a1512; --paper-color: #C8CDB9; --ink-color: #3B2E25; --highlight: #8B0000; }
         * { box-sizing: border-box; }
         body { background-color: var(--bg-color); color: var(--paper-color); font-family: 'VT323', monospace; margin: 0; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; }
@@ -36,9 +36,29 @@
         .btn-save { width: 100%; padding: 20px; background: var(--ink-color); color: var(--paper-color); font-size: 1.5rem; border: none; cursor: pointer; font-family: 'VT323'; }
         
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); color: #fff; display: flex; justify-content: center; align-items: center; font-size: 2rem; z-index: 3000; display: none; }
+        
+        /* --- ALERTA CUSTOMIZADO CMS --- */
+        #alerta-global {
+            position: fixed; top: 20px; right: 20px; z-index: 5000; 
+            background-color: var(--paper-color); color: var(--ink-color);
+            border: 3px double var(--ink-color); padding: 20px 30px;
+            font-family: 'VT323', monospace; max-width: 350px;
+            box-shadow: 8px 8px 0 rgba(0,0,0,0.5);
+            transition: transform 0.6s ease-out; 
+            transform: translateX(120%); 
+            cursor: pointer;
+        }
+
+        #alerta-global.mostrar { transform: translateX(0); }
+        #alerta-global.erro { border-color: var(--highlight); color: var(--highlight); }
     </style>
 </head>
 <body>
+
+    <div id="alerta-global" onclick="this.classList.remove('mostrar')">
+        <p id="alerta-mensagem">Mensagem</p>
+        <small>CLIQUE PARA FECHAR</small>
+    </div>
 
     <div id="loading-overlay">ENVIANDO PARA A NUVEM...</div>
 
@@ -79,7 +99,8 @@
 
                     <label>Imagem de Capa (Upload)</label>
                     <input type="file" id="input-arquivo" accept="image/*">
-                    <input type="hidden" id="url-imagem-atual"> <div id="preview-container">
+                    <input type="hidden" id="url-imagem-atual">
+                    <div id="preview-container">
                         <small id="txt-sem-img">Nenhuma imagem selecionada</small>
                         <img id="preview-img" class="preview-img">
                     </div>
@@ -103,6 +124,25 @@
         import { db, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, auth, signInWithEmailAndPassword, onAuthStateChanged, storage, ref, uploadBytes, getDownloadURL } from './firebase-config.js';
 
         let postAtualId = null;
+        
+        // --- FUNÇÃO CUSTOMIZADA DE ALERTA (Para substituir alert()) ---
+        window.mostrarAlerta = function(mensagem, tipo = 'sucesso') {
+            const alerta = document.getElementById('alerta-global');
+            const msg = document.getElementById('alerta-mensagem');
+
+            msg.innerText = mensagem;
+            alerta.classList.remove('erro');
+
+            if (tipo === 'erro') {
+                alerta.classList.add('erro');
+            }
+
+            alerta.classList.add('mostrar');
+
+            setTimeout(() => {
+                alerta.classList.remove('mostrar');
+            }, 5000);
+        }
 
         // AUTH
         onAuthStateChanged(auth, u => {
@@ -115,7 +155,9 @@
             e.preventDefault();
             try {
                 await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('senha').value);
-            } catch(e) { alert("Erro login: " + e.code); }
+            } catch(e) { 
+                mostrarAlerta("ACESSO NEGADO: " + e.code, 'erro');
+            }
         });
 
         // PREVIEW DA IMAGEM
@@ -159,8 +201,7 @@
             document.getElementById('resumo').value = p.resumo;
             document.getElementById('conteudo').value = p.conteudo || "";
             
-            // Lógica da Imagem
-            document.getElementById('url-imagem-atual').value = p.imagem; // Guarda a URL antiga
+            document.getElementById('url-imagem-atual').value = p.imagem; 
             if(p.imagem && p.imagem.startsWith('http')) {
                 document.getElementById('preview-img').src = p.imagem;
                 document.getElementById('preview-img').style.display = "block";
@@ -169,7 +210,7 @@
                 document.getElementById('preview-img').style.display = "none";
                 document.getElementById('txt-sem-img').style.display = "block";
             }
-            document.getElementById('input-arquivo').value = ""; // Reseta o input file
+            document.getElementById('input-arquivo').value = ""; 
         }
 
         window.modoNovoPost = () => {
@@ -191,27 +232,20 @@
                 let urlFinal = document.getElementById('url-imagem-atual').value;
                 const arquivo = document.getElementById('input-arquivo').files[0];
 
-                // SE TIVER ARQUIVO NOVO, FAZ UPLOAD
                 if (arquivo) {
-                    // Cria uma referência única: posts/data-nomearquivo
                     const nomeArquivo = `posts/${Date.now()}-${arquivo.name}`;
                     const storageRef = ref(storage, nomeArquivo);
-                    
-                    // Sobe o arquivo
                     await uploadBytes(storageRef, arquivo);
-                    
-                    // Pega o Link
                     urlFinal = await getDownloadURL(storageRef);
                 }
 
-                // Se não tiver URL nenhuma (nem antiga nem nova), usa placeholder
                 if (!urlFinal) urlFinal = "https://placehold.co/600x400?text=SEM+IMAGEM";
 
                 const dados = {
                     titulo: document.getElementById('titulo').value,
                     categoria: document.getElementById('categoria').value,
                     data: document.getElementById('data').value,
-                    imagem: urlFinal, // Salva o link do Firebase Storage
+                    imagem: urlFinal,
                     resumo: document.getElementById('resumo').value,
                     conteudo: document.getElementById('conteudo').value,
                     link: "ver-post.html",
@@ -220,15 +254,15 @@
 
                 if(postAtualId) {
                     await updateDoc(doc(db, "posts", postAtualId), dados);
-                    alert("Atualizado com sucesso!");
+                    mostrarAlerta("Arquivo atualizado com sucesso!");
                 } else {
                     await addDoc(collection(db, "posts"), dados);
-                    alert("Criado com sucesso!");
+                    mostrarAlerta("Novo arquivo criado no servidor!");
                     window.modoNovoPost();
                 }
                 carregarLista();
             } catch (e) {
-                alert("Erro: " + e.message);
+                mostrarAlerta("ERRO FATAL: " + e.message, 'erro');
                 console.error(e);
             } finally {
                 mostrarLoading(false);
@@ -238,20 +272,32 @@
         window.deletarPost = async () => {
             if(postAtualId && confirm("Deletar?")) {
                 mostrarLoading(true);
-                await deleteDoc(doc(db, "posts", postAtualId));
-                mostrarLoading(false);
-                alert("Deletado.");
-                window.modoNovoPost();
-                carregarLista();
+                try {
+                    await deleteDoc(doc(db, "posts", postAtualId));
+                    mostrarAlerta("Arquivo deletado com sucesso.");
+                    window.modoNovoPost();
+                    carregarLista();
+                } catch (e) {
+                    mostrarAlerta("ERRO AO DELETAR: " + e.message, 'erro');
+                } finally {
+                    mostrarLoading(false);
+                }
             }
+        }
+        
+        window.inserirTag = (abre, fecha) => {
+            const t = document.getElementById('conteudo');
+            t.setRangeText(abre + t.value.substring(t.selectionStart, t.selectionEnd) + fecha);
+            t.focus();
         }
 
         function mostrarLoading(show) {
             document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
         }
 
-        // Init
-        document.getElementById('data').value = new Date().toLocaleDateString('pt-BR');
+        const hoje = new Date();
+        document.getElementById('data').value = hoje.toLocaleDateString('pt-BR');
+        carregarLista();
     </script>
 </body>
 </html>
