@@ -693,3 +693,30 @@ figure.post-feature-image figcaption {
     font-size: 1rem;
     padding: 5px 10px;
 }
+
+/* --- JANELA DE ALERTA RETRÔ (Pop-up de Notificação) --- */
+#alerta-global {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 5000; 
+    background-color: var(--paper-color);
+    color: var(--ink-color);
+    border: 3px double var(--ink-color);
+    padding: 20px 30px;
+    font-family: var(--font-term);
+    max-width: 350px;
+    box-shadow: 8px 8px 0 rgba(0,0,0,0.5);
+    transition: transform 0.6s ease-out; /* Animação de deslize */
+    transform: translateX(120%); /* Começa fora da tela */
+    cursor: pointer;
+}
+
+#alerta-global.mostrar {
+    transform: translateX(0); /* Entra na tela */
+}
+
+#alerta-global.erro {
+    border-color: var(--highlight); /* Cor de destaque (vermelho) para erro */
+    color: var(--highlight);
+}
