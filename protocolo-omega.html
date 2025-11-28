@@ -3,28 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CMS // ACESSO RESTRITO</title>
+    <title>CMS 2.0 // ECOS</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
-        /* MANTENHA O CSS ANTIGO */
+        /* CSS MANTIDO */
         :root { --bg-color: #1a1512; --paper-color: #C8CDB9; --ink-color: #3B2E25; --highlight: #8B0000; }
         * { box-sizing: border-box; }
         body { background-color: var(--bg-color); color: var(--paper-color); font-family: 'VT323', monospace; margin: 0; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         
-        /* LOGIN */
         #login-screen { background: var(--paper-color); color: var(--ink-color); padding: 40px; border: 4px double var(--ink-color); text-align: center; box-shadow: 0 0 50px rgba(0,0,0,0.9); z-index: 2000; }
         #login-screen input { width: 100%; margin-bottom: 15px; padding: 10px; font-size: 1.2rem; background: rgba(0,0,0,0.1); border: 1px solid var(--ink-color); }
         #login-screen button { width: 100%; padding: 10px; background: var(--ink-color); color: var(--paper-color); border: none; font-size: 1.5rem; cursor: pointer; }
 
-        /* APP */
         #app-container { display: none; width: 100%; height: 100%; }
         aside { width: 300px; background: rgba(0,0,0,0.3); border-right: 2px solid var(--paper-color); display: flex; flex-direction: column; padding: 20px; float: left; height: 100%; }
         main { flex-grow: 1; padding: 40px; overflow-y: auto; background-image: radial-gradient(circle, rgba(59, 46, 37, 0.1) 0%, #1a1512 100%); width: 100%; }
         
         .editor-container { max-width: 900px; margin: 0 auto; background: var(--paper-color); color: var(--ink-color); padding: 40px; }
         
-        /* ESTILO DO INPUT FILE */
         input[type="file"] { border: 1px dashed var(--ink-color); padding: 10px; background: rgba(255,255,255,0.2); cursor: pointer; }
         .preview-img { max-width: 100px; max-height: 100px; border: 2px solid var(--ink-color); margin-top: 10px; display: none; }
         
@@ -37,7 +34,7 @@
         
         #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); color: #fff; display: flex; justify-content: center; align-items: center; font-size: 2rem; z-index: 3000; display: none; }
         
-        /* --- ALERTA CUSTOMIZADO CMS --- */
+        /* ALERTA CUSTOMIZADO */
         #alerta-global {
             position: fixed; top: 20px; right: 20px; z-index: 5000; 
             background-color: var(--paper-color); color: var(--ink-color);
@@ -48,9 +45,13 @@
             transform: translateX(120%); 
             cursor: pointer;
         }
-
         #alerta-global.mostrar { transform: translateX(0); }
         #alerta-global.erro { border-color: var(--highlight); color: var(--highlight); }
+
+        /* Toolbar para os botões */
+        .toolbar { margin-bottom: 5px; display: flex; gap: 5px; }
+        .tool-btn { background: var(--ink-color); color: var(--paper-color); border: none; padding: 5px 10px; font-family: 'VT323'; cursor: pointer; }
+        .tool-btn:hover { background: #000; }
     </style>
 </head>
 <body>
@@ -60,12 +61,11 @@
         <small>CLIQUE PARA FECHAR</small>
     </div>
 
-    <div id="loading-overlay">ENVIANDO PARA A NUVEM...</div>
+    <div id="loading-overlay">PROCESSANDO DADOS...</div>
 
     <div id="login-screen">
         <h2>ACESSO RESTRITO</h2>
         <form id="login-form">
-            <input type="hidden" id="post-id-secreto">
             <input type="email" id="email" placeholder="EMAIL" required>
             <input type="password" id="senha" placeholder="SENHA" required>
             <button type="submit">ENTRAR</button>
@@ -75,6 +75,7 @@
     <div id="app-container">
         <aside>
             <h2 style="text-align:center; font-family:'Jacquard 12'">ECOS ADMIN</h2>
+            <button onclick="fazerLogout()" style="width:100%; border:1px solid var(--highlight); color:var(--highlight); background:transparent; cursor:pointer; margin-bottom:10px;">SAIR</button>
             <button onclick="modoNovoPost()" style="width:100%; padding:10px; margin-bottom:20px; cursor:pointer;">+ NOVO</button>
             <ul class="post-list" id="lista-posts"></ul>
         </aside>
@@ -110,6 +111,13 @@
                     <input type="text" id="resumo" required>
                     
                     <label>Conteúdo HTML</label>
+                    <div class="toolbar">
+                        <button type="button" class="tool-btn" onclick="inserirTag('<h3>', '</h3>')">Subtítulo</button>
+                        <button type="button" class="tool-btn" onclick="inserirTag('<p>', '</p>')">Parágrafo</button>
+                        <button type="button" class="tool-btn" onclick="inserirTag('<b>', '</b>')">Negrito</button>
+                        <button type="button" class="tool-btn" onclick="inserirTag('<i>', '</i>')">Itálico</button>
+                        <button type="button" class="tool-btn" onclick="inserirTag('<ul><li>', '</li></ul>')">Lista</button>
+                    </div>
                     <textarea id="conteudo" required></textarea>
                     
                     <div style="display:flex; gap:10px; margin-top:20px;">
@@ -121,41 +129,23 @@
         </main>
     </div>
 
-   <script type="module">
-        import { db, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, auth, signInWithEmailAndPassword, onAuthStateChanged, storage, ref, uploadBytes, getDownloadURL } from './firebase-config.js';
+    <script type="module">
+        import { db, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, auth, signInWithEmailAndPassword, onAuthStateChanged, signOut, storage, ref, uploadBytes, getDownloadURL } from './firebase-config.js';
 
         let postAtualId = null;
         
         // --- FUNÇÃO DE ALERTA ---
-        window.mostrarAlerta = function(mensagem, tipo = 'sucesso') {
+        function mostrarAlerta(mensagem, tipo = 'sucesso') {
             const alerta = document.getElementById('alerta-global');
             const msg = document.getElementById('alerta-mensagem');
-            if (!alerta) return; 
             msg.innerText = mensagem;
             alerta.classList.remove('erro');
-            if (tipo === 'erro') {
-                alerta.classList.add('erro');
-            }
+            if (tipo === 'erro') alerta.classList.add('erro');
             alerta.classList.add('mostrar');
-            setTimeout(() => {
-                alerta.classList.remove('mostrar');
-            }, 5000);
-        }
-        
-        // --- FUNÇÃO DE FORMATAÇÃO (AGORA CORRETA) ---
-        window.inserirTag = function(abre, fecha) {
-            const textarea = document.getElementById('conteudo');
-            const start = textarea.selectionStart;
-            const end = textarea.selectionEnd;
-            
-            // Insere a tag e mantém o cursor onde estava
-            const novoTexto = textarea.value.substring(0, start) + abre + textarea.value.substring(start, end) + fecha + textarea.value.substring(end);
-            textarea.value = novoTexto;
-            textarea.focus();
+            setTimeout(() => alerta.classList.remove('mostrar'), 5000);
         }
 
-
-        // AUTH
+        // --- AUTH ---
         onAuthStateChanged(auth, u => {
             document.getElementById('login-screen').style.display = u ? 'none' : 'block';
             document.getElementById('app-container').style.display = u ? 'flex' : 'none';
@@ -166,18 +156,27 @@
             e.preventDefault();
             try {
                 await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('senha').value);
-            } catch(e) { 
-                mostrarAlerta("ACESSO NEGADO: " + e.code, 'erro');
+            } catch(e) { mostrarAlerta("ACESSO NEGADO: " + e.code, 'erro'); }
+        });
+
+        window.fazerLogout = () => signOut(auth);
+
+        // --- PREVIEW IMAGEM ---
+        document.getElementById('input-arquivo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if(file){
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview-img').src = e.target.result;
+                    document.getElementById('preview-img').style.display = "block";
+                    document.getElementById('txt-sem-img').style.display = "none";
+                }
+                reader.readAsDataURL(file);
             }
         });
 
-        // PREVIEW DA IMAGEM & CARREGAR LISTA (Mantido igual)
-        document.getElementById('input-arquivo').addEventListener('change', function(e) { /* ... */ });
-        // ... (resto do JS de preview, carregarLista, modoNovoPost, deletarPost, etc. mantido igual) ...
-        
-        // CARREGAR LISTA
+        // --- CARREGAR LISTA ---
         async function carregarLista() {
-            // ... (Função carregarLista mantida igual) ...
             const lista = document.getElementById('lista-posts');
             lista.innerHTML = '<li>Carregando...</li>';
             const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
@@ -188,25 +187,22 @@
                 const li = document.createElement('li');
                 li.className = 'post-item';
                 li.innerHTML = `<strong>${p.titulo}</strong><br><small>${p.categoria}</small>`;
-                li.onclick = () => carregarNoForm(d.id, p); // <-- Esta função será corrigida abaixo
+                li.onclick = () => carregarNoForm(d.id, p);
                 lista.appendChild(li);
             });
         }
 
-        // --- FUNÇÃO QUE CARREGA DADOS PARA EDIÇÃO (CORRIGIDA) ---
+        // --- FUNÇÕES GLOBAIS (window) ---
         window.carregarNoForm = (id, p) => {
             postAtualId = id;
             document.getElementById('titulo-modo').innerText = "EDITANDO";
-            
-            // Popula os campos. O valor do Firestore (p.conteudo) será setado diretamente
             document.getElementById('titulo').value = p.titulo;
             document.getElementById('categoria').value = p.categoria;
             document.getElementById('data').value = p.data;
             document.getElementById('resumo').value = p.resumo;
-            document.getElementById('conteudo').value = p.conteudo || ""; // <-- A linha que faltava o || "" para prevenir erro
+            document.getElementById('conteudo').value = p.conteudo || "";
             
-            // Lógica da Imagem (Mantida igual)
-            document.getElementById('url-imagem-atual').value = p.imagem;
+            document.getElementById('url-imagem-atual').value = p.imagem; 
             if(p.imagem && p.imagem.startsWith('http')) {
                 document.getElementById('preview-img').src = p.imagem;
                 document.getElementById('preview-img').style.display = "block";
@@ -215,14 +211,104 @@
                 document.getElementById('preview-img').style.display = "none";
                 document.getElementById('txt-sem-img').style.display = "block";
             }
-            document.getElementById('input-arquivo').value = "";
+            document.getElementById('input-arquivo').value = ""; 
         }
-        
-        // ... (O restante das funções como modoNovoPost, SALVAR, deletarPost permanecem iguais, pois a lógica de edição/criação já estava certa.)
+
+        window.modoNovoPost = () => {
+            postAtualId = null;
+            document.getElementById('post-form').reset();
+            document.getElementById('titulo-modo').innerText = "NOVO ARQUIVO";
+            document.getElementById('data').value = new Date().toLocaleDateString('pt-BR');
+            document.getElementById('url-imagem-atual').value = "";
+            document.getElementById('preview-img').style.display = "none";
+            document.getElementById('txt-sem-img').style.display = "block";
+        }
+
+        window.inserirTag = (abre, fecha) => {
+            const t = document.getElementById('conteudo');
+            const start = t.selectionStart;
+            const end = t.selectionEnd;
+            const text = t.value;
+            const before = text.substring(0, start);
+            const selected = text.substring(start, end);
+            const after = text.substring(end);
+            
+            t.value = before + abre + selected + fecha + after;
+            
+            // Recoloca o cursor
+            t.selectionStart = start + abre.length;
+            t.selectionEnd = end + abre.length;
+            t.focus();
+        }
+
+        // --- SALVAR ---
+        document.getElementById('post-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            mostrarLoading(true);
+
+            try {
+                let urlFinal = document.getElementById('url-imagem-atual').value;
+                const arquivo = document.getElementById('input-arquivo').files[0];
+
+                if (arquivo) {
+                    const nomeArquivo = `posts/${Date.now()}-${arquivo.name}`;
+                    const storageRef = ref(storage, nomeArquivo);
+                    await uploadBytes(storageRef, arquivo);
+                    urlFinal = await getDownloadURL(storageRef);
+                }
+
+                if (!urlFinal) urlFinal = "https://placehold.co/600x400?text=SEM+IMAGEM";
+
+                const dados = {
+                    titulo: document.getElementById('titulo').value,
+                    categoria: document.getElementById('categoria').value,
+                    data: document.getElementById('data').value,
+                    imagem: urlFinal,
+                    resumo: document.getElementById('resumo').value,
+                    conteudo: document.getElementById('conteudo').value,
+                    link: "ver-post.html",
+                    timestamp: new Date()
+                };
+
+                if(postAtualId) {
+                    await updateDoc(doc(db, "posts", postAtualId), dados);
+                    mostrarAlerta("ARQUIVO ATUALIZADO!");
+                } else {
+                    await addDoc(collection(db, "posts"), dados);
+                    mostrarAlerta("ARQUIVO CRIADO!");
+                    window.modoNovoPost();
+                }
+                carregarLista();
+            } catch (e) {
+                mostrarAlerta("ERRO: " + e.message, 'erro');
+                console.error(e);
+            } finally {
+                mostrarLoading(false);
+            }
+        });
+
+        window.deletarPost = async () => {
+            if(postAtualId && confirm("Deletar permanentemente?")) {
+                mostrarLoading(true);
+                try {
+                    await deleteDoc(doc(db, "posts", postAtualId));
+                    mostrarAlerta("ARQUIVO DELETADO.");
+                    window.modoNovoPost();
+                    carregarLista();
+                } catch (e) {
+                    mostrarAlerta("ERRO: " + e.message, 'erro');
+                } finally {
+                    mostrarLoading(false);
+                }
+            }
+        }
+
+        function mostrarLoading(show) {
+            document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
+        }
 
         // Init
-        const hoje = new Date();
-        document.getElementById('data').value = hoje.toLocaleDateString('pt-BR');
+        document.getElementById('data').value = new Date().toLocaleDateString('pt-BR');
     </script>
 </body>
 </html>
