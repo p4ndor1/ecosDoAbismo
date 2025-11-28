@@ -3,59 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ACESSO RESTRITO // ECOS</title>
+    <title>CMS 2.0 // ECOS</title>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=">
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
-        /* CSS IGUAL AO ANTERIOR, COM ADIÇÃO DA TELA DE LOGIN */
+        /* MANTENHA O CSS ANTIGO - ELE ESTÁ ÓTIMO */
         :root { --bg-color: #1a1512; --paper-color: #C8CDB9; --ink-color: #3B2E25; --highlight: #8B0000; }
         * { box-sizing: border-box; }
         body { background-color: var(--bg-color); color: var(--paper-color); font-family: 'VT323', monospace; margin: 0; height: 100vh; overflow: hidden; display: flex; justify-content: center; align-items: center; }
         
-        /* TELA DE LOGIN */
-        #login-screen {
-            background: var(--paper-color); color: var(--ink-color); padding: 40px;
-            border: 4px double var(--ink-color); text-align: center;
-            box-shadow: 0 0 50px rgba(0,0,0,0.9); z-index: 2000;
-        }
-        #login-screen input { width: 100%; margin-bottom: 15px; padding: 10px; font-size: 1.2rem; background: rgba(0,0,0,0.1); border: 1px solid var(--ink-color); color: var(--ink-color); font-family: 'VT323'; }
-        #login-screen button { width: 100%; padding: 10px; background: var(--ink-color); color: var(--paper-color); border: none; font-size: 1.5rem; cursor: pointer; font-family: 'VT323'; }
-        #login-screen button:hover { background: #000; }
+        /* LOGIN */
+        #login-screen { background: var(--paper-color); color: var(--ink-color); padding: 40px; border: 4px double var(--ink-color); text-align: center; box-shadow: 0 0 50px rgba(0,0,0,0.9); z-index: 2000; }
+        #login-screen input { width: 100%; margin-bottom: 15px; padding: 10px; font-size: 1.2rem; background: rgba(0,0,0,0.1); border: 1px solid var(--ink-color); }
+        #login-screen button { width: 100%; padding: 10px; background: var(--ink-color); color: var(--paper-color); border: none; font-size: 1.5rem; cursor: pointer; }
 
-        /* PAINEL (Escondido por padrão) */
+        /* APP */
         #app-container { display: none; width: 100%; height: 100%; }
-        
-        /* ... (O RESTO DO CSS DO PAINEL QUE JÁ FIZEMOS MANTÉM IGUAL) ... */
         aside { width: 300px; background: rgba(0,0,0,0.3); border-right: 2px solid var(--paper-color); display: flex; flex-direction: column; padding: 20px; float: left; height: 100%; }
-        main { flex-grow: 1; padding: 40px; overflow-y: auto; background-image: radial-gradient(circle, rgba(59, 46, 37, 0.1) 0%, #1a1512 100%); height: 100%; float: left; width: calc(100% - 300px); }
-        .post-list { list-style: none; padding: 0; margin: 0; overflow-y: auto; flex-grow: 1; text-align: left; }
-        .post-item { padding: 15px; border-bottom: 1px dashed #444; cursor: pointer; opacity: 0.7; }
-        .post-item:hover { opacity: 1; background: rgba(255,255,255,0.05); }
-        .editor-container { max-width: 900px; margin: 0 auto; background: var(--paper-color); color: var(--ink-color); padding: 40px; position: relative; }
+        main { flex-grow: 1; padding: 40px; overflow-y: auto; background-image: radial-gradient(circle, rgba(59, 46, 37, 0.1) 0%, #1a1512 100%); width: 100%; }
+        
+        .editor-container { max-width: 900px; margin: 0 auto; background: var(--paper-color); color: var(--ink-color); padding: 40px; }
+        
+        /* ESTILO DO INPUT FILE */
+        input[type="file"] { border: 1px dashed var(--ink-color); padding: 10px; background: rgba(255,255,255,0.2); cursor: pointer; }
+        .preview-img { max-width: 100px; max-height: 100px; border: 2px solid var(--ink-color); margin-top: 10px; display: none; }
+        
         input, select, textarea { width: 100%; background: rgba(59, 46, 37, 0.05); border: 1px solid var(--ink-color); padding: 10px; font-family: 'VT323'; font-size: 1.3rem; color: var(--ink-color); margin-bottom: 15px; outline: none; }
-        textarea { height: 400px; resize: vertical; }
-        .toolbar { display: flex; gap: 5px; margin-bottom: 5px; background: var(--ink-color); padding: 5px; }
-        .tool-btn { background: var(--paper-color); border: none; cursor: pointer; font-weight: bold; padding: 5px 10px; font-family: 'VT323'; }
+        textarea { height: 300px; resize: vertical; }
+        .post-list { list-style: none; padding: 0; margin: 0; overflow-y: auto; flex-grow: 1; }
+        .post-item { padding: 10px; border-bottom: 1px dashed #555; cursor: pointer; }
+        .post-item:hover { background: rgba(255,255,255,0.1); }
         .btn-save { width: 100%; padding: 20px; background: var(--ink-color); color: var(--paper-color); font-size: 1.5rem; border: none; cursor: pointer; font-family: 'VT323'; }
+        
+        #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); color: #fff; display: flex; justify-content: center; align-items: center; font-size: 2rem; z-index: 3000; display: none; }
     </style>
 </head>
 <body>
 
+    <div id="loading-overlay">ENVIANDO PARA A NUVEM...</div>
+
     <div id="login-screen">
-        <h2 style="margin-top:0; font-family:'Jacquard 12'; font-size:2.5rem">IDENTIFICAÇÃO REQUERIDA</h2>
+        <h2>ACESSO RESTRITO</h2>
         <form id="login-form">
-            <input type="email" id="email" placeholder="EMAIL DE COMANDO" required>
-            <input type="password" id="senha" placeholder="SENHA DE ACESSO" required>
-            <button type="submit">AUTENTICAR</button>
-            <p id="login-error" style="color:red; display:none;">ACESSO NEGADO</p>
+            <input type="email" id="email" placeholder="EMAIL" required>
+            <input type="password" id="senha" placeholder="SENHA" required>
+            <button type="submit">ENTRAR</button>
         </form>
     </div>
 
     <div id="app-container">
         <aside>
-            <button onclick="fazerLogout()" style="background:transparent; border:1px solid red; color:red; cursor:pointer; margin-bottom:10px;">SAIR DO SISTEMA</button>
-            <div style="text-align:center; font-size:2rem; margin-bottom:20px; font-family:'Jacquard 12'">Ecos do Abismo</div>
-            <button onclick="modoNovoPost()" style="width:100%; padding:10px; background:var(--paper-color); border:none; cursor:pointer; font-weight:bold; font-family:'VT323'; font-size:1.2rem">+ NOVO ARQUIVO</button>
+            <h2 style="text-align:center; font-family:'Jacquard 12'">ECOS ADMIN</h2>
+            <button onclick="modoNovoPost()" style="width:100%; padding:10px; margin-bottom:20px; cursor:pointer;">+ NOVO</button>
             <ul class="post-list" id="lista-posts"></ul>
         </aside>
 
@@ -63,25 +62,37 @@
             <div class="editor-container">
                 <h2 id="titulo-modo">NOVO ARQUIVO</h2>
                 <form id="post-form">
-                    <label>Título</label><input type="text" id="titulo" required>
+                    <label>Título</label>
+                    <input type="text" id="titulo" required>
+                    
                     <div style="display:flex; gap:10px;">
-                        <select id="categoria" style="flex:1"><option value="crimes">Crimes</option><option value="darkweb">DarkWeb</option><option value="assombracoes">Assombrações</option><option value="livros">Livros</option><option value="filmes">Filmes</option><option value="jogos">Jogos</option></select>
+                        <select id="categoria" style="flex:1">
+                            <option value="crimes">Crimes Reais</option>
+                            <option value="darkweb">Dark Web</option>
+                            <option value="assombracoes">Assombrações</option>
+                            <option value="livros">Livros</option>
+                            <option value="filmes">Filmes</option>
+                            <option value="jogos">Jogos</option>
+                        </select>
                         <input type="text" id="data" style="flex:1">
                     </div>
-                    <label>Imagem</label><input type="text" id="imagem" value="../img/">
-                    <label>Resumo</label><input type="text" id="resumo" required>
-                    
-                    <label>Conteúdo</label>
-                    <div class="toolbar">
-                        <button type="button" class="tool-btn" onclick="inserirTag('<h3>', '</h3>')">H3</button>
-                        <button type="button" class="tool-btn" onclick="inserirTag('<p>', '</p>')">P</button>
-                        <button type="button" class="tool-btn" onclick="inserirTag('<b>', '</b>')">B</button>
+
+                    <label>Imagem de Capa (Upload)</label>
+                    <input type="file" id="input-arquivo" accept="image/*">
+                    <input type="hidden" id="url-imagem-atual"> <div id="preview-container">
+                        <small id="txt-sem-img">Nenhuma imagem selecionada</small>
+                        <img id="preview-img" class="preview-img">
                     </div>
+
+                    <label style="margin-top:15px">Resumo</label>
+                    <input type="text" id="resumo" required>
+                    
+                    <label>Conteúdo HTML</label>
                     <textarea id="conteudo" required></textarea>
                     
                     <div style="display:flex; gap:10px; margin-top:20px;">
-                        <button type="button" onclick="deletarPost()" style="flex:1; background:transparent; border:2px solid red; color:red; cursor:pointer; font-family:'VT323'; font-size:1.2rem">DELETAR</button>
-                        <button type="submit" class="btn-save" style="flex:2">SALVAR DADOS</button>
+                        <button type="button" onclick="deletarPost()" style="flex:1; background:transparent; border:1px solid red; color:red; cursor:pointer;">DELETAR</button>
+                        <button type="submit" class="btn-save" style="flex:2">SALVAR NO SERVIDOR</button>
                     </div>
                 </form>
             </div>
@@ -89,68 +100,76 @@
     </div>
 
     <script type="module">
-        // Importa tudo, inclusive Auth
-        import { db, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, auth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from './firebase-config.js';
+        import { db, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, auth, signInWithEmailAndPassword, onAuthStateChanged, storage, ref, uploadBytes, getDownloadURL } from './firebase-config.js';
 
         let postAtualId = null;
 
-        // 1. VERIFICA SE ESTÁ LOGADO
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // Se logou: esconde login, mostra painel, carrega lista
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('app-container').style.display = 'flex';
-                carregarLista();
-            } else {
-                // Se não: mostra login, esconde painel
-                document.getElementById('login-screen').style.display = 'block';
-                document.getElementById('app-container').style.display = 'none';
-            }
+        // AUTH
+        onAuthStateChanged(auth, u => {
+            document.getElementById('login-screen').style.display = u ? 'none' : 'block';
+            document.getElementById('app-container').style.display = u ? 'flex' : 'none';
+            if(u) carregarLista();
         });
 
-        // 2. FAZER LOGIN
         document.getElementById('login-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = document.getElementById('email').value;
-            const senha = document.getElementById('senha').value;
             try {
-                await signInWithEmailAndPassword(auth, email, senha);
-            } catch (error) {
-                document.getElementById('login-error').style.display = 'block';
-                document.getElementById('login-error').innerText = "ERRO: " + error.code;
+                await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('senha').value);
+            } catch(e) { alert("Erro login: " + e.code); }
+        });
+
+        // PREVIEW DA IMAGEM
+        document.getElementById('input-arquivo').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if(file){
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview-img').src = e.target.result;
+                    document.getElementById('preview-img').style.display = "block";
+                    document.getElementById('txt-sem-img').style.display = "none";
+                }
+                reader.readAsDataURL(file);
             }
         });
 
-        // 3. FAZER LOGOUT
-        window.fazerLogout = () => signOut(auth);
-
-        // --- FUNÇÕES DO CMS (Igual ao anterior) ---
-        
+        // CARREGAR LISTA
         async function carregarLista() {
             const lista = document.getElementById('lista-posts');
             lista.innerHTML = '<li>Carregando...</li>';
             const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
-            const snapshot = await getDocs(q);
+            const s = await getDocs(q);
             lista.innerHTML = "";
-            snapshot.forEach((doc) => {
-                const p = doc.data();
+            s.forEach(d => {
+                const p = d.data();
                 const li = document.createElement('li');
                 li.className = 'post-item';
                 li.innerHTML = `<strong>${p.titulo}</strong><br><small>${p.categoria}</small>`;
-                li.onclick = () => carregarNoForm(doc.id, p);
+                li.onclick = () => carregarNoForm(d.id, p);
                 lista.appendChild(li);
             });
         }
 
+        // CARREGAR NO FORM
         window.carregarNoForm = (id, p) => {
             postAtualId = id;
             document.getElementById('titulo-modo').innerText = "EDITANDO";
             document.getElementById('titulo').value = p.titulo;
             document.getElementById('categoria').value = p.categoria;
             document.getElementById('data').value = p.data;
-            document.getElementById('imagem').value = p.imagem;
             document.getElementById('resumo').value = p.resumo;
             document.getElementById('conteudo').value = p.conteudo || "";
+            
+            // Lógica da Imagem
+            document.getElementById('url-imagem-atual').value = p.imagem; // Guarda a URL antiga
+            if(p.imagem && p.imagem.startsWith('http')) {
+                document.getElementById('preview-img').src = p.imagem;
+                document.getElementById('preview-img').style.display = "block";
+                document.getElementById('txt-sem-img').style.display = "none";
+            } else {
+                document.getElementById('preview-img').style.display = "none";
+                document.getElementById('txt-sem-img').style.display = "block";
+            }
+            document.getElementById('input-arquivo').value = ""; // Reseta o input file
         }
 
         window.modoNovoPost = () => {
@@ -158,46 +177,81 @@
             document.getElementById('post-form').reset();
             document.getElementById('titulo-modo').innerText = "NOVO ARQUIVO";
             document.getElementById('data').value = new Date().toLocaleDateString('pt-BR');
-            document.getElementById('imagem').value = "../img/";
+            document.getElementById('url-imagem-atual').value = "";
+            document.getElementById('preview-img').style.display = "none";
+            document.getElementById('txt-sem-img').style.display = "block";
         }
 
+        // SALVAR (COM UPLOAD)
         document.getElementById('post-form').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const dados = {
-                titulo: document.getElementById('titulo').value,
-                categoria: document.getElementById('categoria').value,
-                data: document.getElementById('data').value,
-                imagem: document.getElementById('imagem').value,
-                resumo: document.getElementById('resumo').value,
-                conteudo: document.getElementById('conteudo').value,
-                link: "ver-post.html",
-                timestamp: new Date()
-            };
-            if(postAtualId) {
-                await updateDoc(doc(db, "posts", postAtualId), dados);
-                alert("Atualizado!");
-            } else {
-                await addDoc(collection(db, "posts"), dados);
-                alert("Criado!");
-                window.modoNovoPost();
+            mostrarLoading(true);
+
+            try {
+                let urlFinal = document.getElementById('url-imagem-atual').value;
+                const arquivo = document.getElementById('input-arquivo').files[0];
+
+                // SE TIVER ARQUIVO NOVO, FAZ UPLOAD
+                if (arquivo) {
+                    // Cria uma referência única: posts/data-nomearquivo
+                    const nomeArquivo = `posts/${Date.now()}-${arquivo.name}`;
+                    const storageRef = ref(storage, nomeArquivo);
+                    
+                    // Sobe o arquivo
+                    await uploadBytes(storageRef, arquivo);
+                    
+                    // Pega o Link
+                    urlFinal = await getDownloadURL(storageRef);
+                }
+
+                // Se não tiver URL nenhuma (nem antiga nem nova), usa placeholder
+                if (!urlFinal) urlFinal = "https://placehold.co/600x400?text=SEM+IMAGEM";
+
+                const dados = {
+                    titulo: document.getElementById('titulo').value,
+                    categoria: document.getElementById('categoria').value,
+                    data: document.getElementById('data').value,
+                    imagem: urlFinal, // Salva o link do Firebase Storage
+                    resumo: document.getElementById('resumo').value,
+                    conteudo: document.getElementById('conteudo').value,
+                    link: "ver-post.html",
+                    timestamp: new Date()
+                };
+
+                if(postAtualId) {
+                    await updateDoc(doc(db, "posts", postAtualId), dados);
+                    alert("Atualizado com sucesso!");
+                } else {
+                    await addDoc(collection(db, "posts"), dados);
+                    alert("Criado com sucesso!");
+                    window.modoNovoPost();
+                }
+                carregarLista();
+            } catch (e) {
+                alert("Erro: " + e.message);
+                console.error(e);
+            } finally {
+                mostrarLoading(false);
             }
-            carregarLista();
         });
 
         window.deletarPost = async () => {
             if(postAtualId && confirm("Deletar?")) {
+                mostrarLoading(true);
                 await deleteDoc(doc(db, "posts", postAtualId));
+                mostrarLoading(false);
                 alert("Deletado.");
                 window.modoNovoPost();
                 carregarLista();
             }
         }
-        
-        window.inserirTag = (a, b) => {
-            const t = document.getElementById('conteudo');
-            t.setRangeText(a + t.value.substring(t.selectionStart, t.selectionEnd) + b);
-            t.focus();
+
+        function mostrarLoading(show) {
+            document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
         }
+
+        // Init
+        document.getElementById('data').value = new Date().toLocaleDateString('pt-BR');
     </script>
 </body>
 </html>
