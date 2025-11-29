@@ -788,3 +788,45 @@ figure.post-feature-image figcaption {
 #home-latest-grid::-webkit-scrollbar { height: 8px; }
 #home-latest-grid::-webkit-scrollbar-track { background: rgba(59, 46, 37, 0.1); }
 #home-latest-grid::-webkit-scrollbar-thumb { background-color: var(--main-color); border-radius: 4px; }
+/* --- CORREÇÃO DE RESPONSIVIDADE (HOME) --- */
+@media (max-width: 768px) {
+    
+    /* 1. Ajusta o container principal */
+    .recent-updates {
+        margin: 20px 10px !important; /* Menos margem nas bordas */
+        border-width: 2px !important; /* Borda mais fina */
+    }
+
+    /* 2. O Cabeçalho (Título + Botão Ao Vivo) */
+    /* Precisamos forçar o flex a quebrar linha se não couber */
+    .recent-updates > div:nth-child(2) {
+        flex-direction: column; /* Empilha um em cima do outro */
+        align-items: flex-start !important; /* Alinha à esquerda */
+        gap: 10px;
+    }
+
+    /* Diminui o título */
+    .recent-updates h2.gothic-sub {
+        font-size: 1.8rem !important;
+        line-height: 1;
+    }
+
+    /* Ajusta o botão AO VIVO */
+    .live-badge {
+        font-size: 0.8rem !important;
+        padding: 2px 6px;
+        align-self: flex-start; /* Garante que fique na esquerda */
+    }
+
+    /* 3. Ajusta o Letreiro */
+    .news-ticker-content {
+        font-size: 0.9rem !important; /* Letra menor para não correr muito rápido */
+        letter-spacing: 1px;
+    }
+
+    /* 4. Ajusta os Cards no Carrossel */
+    #home-latest-grid .hub-card {
+        min-width: 260px !important; /* Cards um pouco menores para caber melhor */
+        max-width: 260px !important;
+    }
+}
