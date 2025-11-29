@@ -1,19 +1,14 @@
-// script.js - Versão Correção de Bug (Sem 'limit')
-// 1. REMOVEMOS O 'limit' DA IMPORTAÇÃO ABAIXO POIS ELE NÃO ESTAVA NO CONFIG
+// script.js - Versão Final (Com Terminal Log na Home)
 import { db, collection, getDocs, query, addDoc, orderBy } from './firebase-config.js';
 
 // --- FUNÇÃO GLOBAL DE ALERTA ---
 window.mostrarAlerta = function(mensagem, tipo = 'sucesso') {
     const alerta = document.getElementById('alerta-global');
-    // Se não tiver o elemento HTML do alerta, usa o alert() comum para não travar
-    if (!alerta) return alert(mensagem); 
-    
     const msg = document.getElementById('alerta-mensagem');
+    if (!alerta) return alert(mensagem); 
     msg.innerText = mensagem;
-    
     alerta.classList.remove('erro');
     if (tipo === 'erro') alerta.classList.add('erro');
-    
     alerta.classList.add('mostrar');
     setTimeout(() => alerta.classList.remove('mostrar'), 5000);
 }
@@ -21,7 +16,7 @@ window.mostrarAlerta = function(mensagem, tipo = 'sucesso') {
 const estouNaPastaPages = window.location.pathname.includes('/pages/');
 const caminhoRaiz = estouNaPastaPages ? '../' : ''; 
 
-// Templates de Cards
+// Templates de Cards (Mantidos para as outras páginas)
 const htmlCardPequeno = (post) => `
     <div class="sidebar-card" style="margin-bottom: 15px; border: 1px solid var(--dim-color); padding: 5px;">
         <a href="${caminhoRaiz}ver-post.html?id=${post.id}" style="text-decoration: none; display: flex; gap: 10px; align-items: center;">
@@ -55,38 +50,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     const categoryTag = document.querySelector('meta[name="page-category"]');
     const sidebarContainer = document.getElementById('recent-posts-sidebar');
     const hubContainer = document.getElementById('category-hub-grid');
-    const homeGrid = document.getElementById('home-latest-grid');
+    
+    // Elementos da Home
+    const homeGrid = document.getElementById('home-latest-grid'); // (Se ainda existir o carrossel)
+    const terminalList = document.getElementById('terminal-list'); // (NOVO: O Terminal)
 
-    // Só busca no banco se tiver onde exibir
-    if (sidebarContainer || hubContainer || homeGrid) {
+    // Só busca no banco se tiver onde exibir algo
+    if (sidebarContainer || hubContainer || homeGrid || terminalList) {
         try {
-            // Tenta buscar ordenado. 
-            // SE DER ERRO AQUI, é porque tem posts antigos sem o campo 'timestamp'
+            // Tenta buscar ordenado por data
             let q;
             try {
                 q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
             } catch (e) {
-                console.warn("Erro na ordenação (talvez falte índice ou timestamp), buscando sem ordem:", e);
-                q = query(collection(db, "posts")); // Fallback: busca sem ordem se der ruim
+                console.warn("Erro na ordenação, buscando padrão:", e);
+                q = query(collection(db, "posts"));
             }
 
             const querySnapshot = await getDocs(q);
             
             let todosPosts = [];
             querySnapshot.forEach((doc) => {
-                // Garante que pegamos o ID e os dados
                 todosPosts.push({ id: doc.id, ...doc.data() });
             });
 
-            // Se não achou nada (ou banco vazio)
-            if (todosPosts.length === 0) {
-                console.log("Nenhum post encontrado no banco de dados.");
-            }
-
-            // A. Lógica da HOME (Posts Recentes)
+            // A. Lógica da HOME (Carrossel Antigo - se vc manteve)
             if (homeGrid) {
                 homeGrid.innerHTML = "";
-                // Pega os 3 primeiros
                 todosPosts.slice(0, 3).forEach(post => {
                     homeGrid.innerHTML += htmlCardGrande(post);
                 });
@@ -95,10 +85,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             // B. Lógica de PÁGINAS INTERNAS (Hubs e Sidebar)
             if (categoryTag) {
                 const categoriaAtual = categoryTag.content;
-                // Filtra pela categoria
                 const postsFiltrados = todosPosts.filter(post => post.categoria === categoriaAtual);
 
-                // Sidebar
                 if (sidebarContainer) {
                     sidebarContainer.innerHTML = "<h4 style='border-bottom: 1px dashed var(--dim-color); margin-bottom: 10px;'>// ARQUIVOS RELACIONADOS</h4>";
                     postsFiltrados.slice(0, 3).forEach(post => {
@@ -106,7 +94,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     });
                 }
 
-                // Grid Principal do Hub
                 if (hubContainer) {
                     hubContainer.innerHTML = "";
                     if(postsFiltrados.length === 0) {
@@ -118,13 +105,31 @@ document.addEventListener('DOMContentLoaded', async () => {
                 }
             }
 
+            // C. LÓGICA DO TERMINAL (NOVA LISTA DA HOME)
+            if (terminalList) {
+                terminalList.innerHTML = "";
+                // Pega os 5 últimos posts
+                todosPosts.slice(0, 5).forEach(post => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <a href="${caminhoRaiz}ver-post.html?id=${post.id}" class="terminal-link">
+                            <span style="flex: 1;">> ${post.titulo.toUpperCase()}</span>
+                            <span class="log-date">[${post.data}]</span>
+                        </a>
+                    `;
+                    // Estiliza a linha via JS caso o CSS falhe
+                    li.style.padding = "8px 0";
+                    li.style.borderBottom = "1px solid #222";
+                    terminalList.appendChild(li);
+                });
+            }
+
         } catch (error) {
-            console.error("ERRO CRÍTICO AO CARREGAR POSTS:", error);
-            if(hubContainer) hubContainer.innerHTML = "<p>ERRO DE CONEXÃO. Verifique o console (F12).</p>";
+            console.error("ERRO CRÍTICO:", error);
         }
     }
 
-    // --- 2. SISTEMA DE NEWSLETTER ---
+    // --- SISTEMA DE NEWSLETTER ---
     const newsForm = document.getElementById('newsletter-form');
     if (newsForm) {
         newsForm.addEventListener('submit', async (e) => {
@@ -142,7 +147,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     origem: window.location.pathname, 
                     data: new Date()
                 });
-                // Verifica se a função existe antes de chamar
                 if (typeof window.mostrarAlerta === "function") {
                     mostrarAlerta("VÍNCULO ESTABELECIDO. AGUARDE NOSSOS SINAIS.");
                 } else {
