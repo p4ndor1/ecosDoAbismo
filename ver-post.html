@@ -101,59 +101,59 @@
 
     <script type="module">
         import { db, doc, getDoc, collection, addDoc, getDocs, query, orderBy } from './firebase-config.js';
-        
-        // Importa o script lateral para preencher a sidebar de recomendados
         import './script.js'; 
 
         const params = new URLSearchParams(window.location.search);
-        const postID = params.get('id'); // Pega o ID da URL (?id=XYZ)
+        const postID = params.get('id'); 
 
+        // --- ARMADILHA ANTI-PÁGINA VAZIA ---
+        // Se não tem ID, manda de volta pra home imediatamente
         if (!postID) {
-            document.getElementById('loading-msg').innerText = "ERRO 404: ARQUIVO NÃO ESPECIFICADO.";
+            window.location.href = "index.html"; 
         } else {
             carregarPost();
         }
+        // -----------------------------------
 
         async function carregarPost() {
             try {
-                // Busca o documento no Firebase pelo ID
                 const docRef = doc(db, "posts", postID);
                 const docSnap = await getDoc(docRef);
 
                 if (docSnap.exists()) {
                     const data = docSnap.data();
-
-                    // Preenche a tela
+                    
                     document.title = data.titulo + " // ECOS";
                     document.getElementById('p-titulo').innerText = data.titulo;
                     document.getElementById('p-data').innerText = data.data;
                     document.getElementById('p-meta').innerText = `ARQUIVO: #${postID.slice(0,4).toUpperCase()} // CATEGORIA: ${data.categoria.toUpperCase()}`;
-                    document.getElementById('p-imagem').src = data.imagem;
                     
-                    // IMPORTANTE: O texto precisa estar no banco. Se não tiver, coloca um aviso.
-                    // DICA: No futuro, você vai editar o texto direto no Firebase num campo chamado 'conteudo'
-                    // Como na migração não enviamos o texto completo (só resumo), vou colocar o resumo aqui provisoriamente
-                    // VOCÊ VAI PRECISAR IR NO FIREBASE E COLAR O HTML DOS SEUS TEXTOS NO CAMPO 'conteudo'
-                    document.getElementById('p-texto').innerHTML = data.conteudo || `<p>${data.resumo}</p><p><em>(Conteúdo completo ainda não digitalizado no servidor. Vá no Firebase e adicione um campo 'conteudo' neste post.)</em></p>`;
-
-                    // Atualiza a meta tag para o script.js saber o que recomendar na sidebar
+                    // Se tiver imagem, mostra. Se não, esconde a tag para não ficar quadrado quebrado
+                    if(data.imagem) {
+                        document.getElementById('p-imagem').src = data.imagem;
+                    } else {
+                        document.querySelector('.post-feature-image').style.display = 'none';
+                    }
+                    
+                    document.getElementById('p-texto').innerHTML = data.conteudo;
                     document.querySelector('meta[name="page-category"]').setAttribute("content", data.categoria);
 
-                    // Mostra o post e esconde o loading
                     document.getElementById('loading-msg').style.display = 'none';
                     document.getElementById('post-content').style.display = 'block';
 
-                    // Carrega comentários deste ID
                     carregarComentarios();
 
                 } else {
-                    document.getElementById('loading-msg').innerText = "ERRO 404: ARQUIVO CORROMPIDO OU DELETADO.";
+                    // Se o ID não existe (link quebrado), manda pra home também
+                    window.location.href = "index.html";
                 }
             } catch (e) {
                 console.error(e);
                 document.getElementById('loading-msg').innerText = "FALHA DE CONEXÃO.";
             }
         }
+        
+        // ... (Mantenha o resto do código de comentários aqui) ...
 
         // --- SISTEMA DE COMENTÁRIOS (Vinculado ao ID) ---
         const form = document.getElementById('comment-form');

@@ -720,3 +720,34 @@ figure.post-feature-image figcaption {
     border-color: var(--highlight); /* Cor de destaque (vermelho) para erro */
     color: var(--highlight);
 }
+
+/* --- MELHORIA DE TIPOGRAFIA DOS POSTS --- */
+.post-body {
+    font-size: 1.3rem; /* Texto um pouco maior */
+    line-height: 1.8;  /* Altura da linha maior para não cansar a vista */
+    text-align: justify; /* Alinhamento justificado (opcional, fica parecendo livro) */
+}
+
+/* Espaço generoso entre parágrafos */
+.post-body p {
+    margin-bottom: 25px; 
+}
+
+/* Espaço extra antes de subtítulos */
+.post-body h3 {
+    margin-top: 40px;
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+    border-bottom: 1px dashed var(--dim-color);
+    padding-bottom: 5px;
+}
+
+/* Listas mais espaçadas */
+.post-body ul, .post-body ol {
+    margin-bottom: 25px;
+    padding-left: 40px;
+}
+
+.post-body li {
+    margin-bottom: 10px;
+}
