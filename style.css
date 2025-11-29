@@ -696,22 +696,34 @@ figure.post-feature-image figcaption {
 
 /* --- TERMINAL DE LOGS (Home) --- */
 .system-logs {
-    max-width: 800px; /* Mais estreito para parecer um console */
+    max-width: 900px;
     margin: 40px auto;
-    background-color: #0a0a0a; /* Fundo quase preto */
-    border: 2px solid var(--main-color);
-    padding: 20px;
-    font-family: 'VT323', monospace;
-    box-shadow: 10px 10px 0 rgba(0,0,0,0.2);
+    background-color: #050505; /* Fundo Preto Hacker */
+    border: 4px double var(--main-color); /* Borda dupla Marrom */
+    padding: 25px;
+    box-shadow: 10px 10px 0 rgba(0,0,0,0.3);
 }
 
 .logs-header {
     display: flex;
     justify-content: space-between;
-    border-bottom: 1px dashed var(--dim-color);
-    padding-bottom: 10px;
-    margin-bottom: 15px;
-    color: var(--bg-color); /* Texto claro */
+    align-items: center;
+    border-bottom: 2px solid var(--dim-color);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    color: var(--bg-color); /* Cor Bege */
+}
+
+/* Novo estilo do Título: Legível e Bold */
+.terminal-title {
+    font-family: 'VT323', monospace; /* Fonte de computador */
+    font-weight: bold;
+    font-size: 2.2rem; /* Bem grande */
+    margin: 0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--bg-color);
+    text-shadow: 2px 2px 0 #000;
 }
 
 .terminal-list {
@@ -721,31 +733,46 @@ figure.post-feature-image figcaption {
 }
 
 .terminal-list li {
-    padding: 8px 0;
-    border-bottom: 1px solid #222;
+    padding: 12px 0;
+    border-bottom: 1px dashed #333; /* Linha pontilhada sutil */
 }
 
-/* O Link do Post */
+/* O Link do Post na lista */
 .terminal-link {
     text-decoration: none;
     color: var(--bg-color); /* Bege */
-    font-size: 1.3rem;
+    font-family: 'VT323', monospace;
+    font-size: 1.4rem; /* Texto da lista grande */
     display: flex;
     justify-content: space-between;
+    align-items: center;
     transition: 0.2s;
 }
 
 .terminal-link:hover {
-    color: var(--main-color); /* Fica Marrom no hover */
+    color: #050505; /* Texto Preto */
     background-color: var(--bg-color); /* Fundo Bege */
-    padding-left: 10px; /* Efeito de movimento */
+    padding-left: 15px; /* Pulo para a direita */
+    font-weight: bold;
 }
 
 .log-date {
     color: var(--dim-color);
-    font-size: 0.9rem;
+    font-size: 1rem;
+    font-family: monospace;
 }
 
 /* Cursor piscando */
-.blink { animation: blinker 1s step-end infinite; }
+.blink { 
+    font-size: 2rem;
+    color: var(--bg-color);
+    animation: blinker 1s step-end infinite; 
+}
 @keyframes blinker { 50% { opacity: 0; } }
+
+/* Responsividade do Terminal */
+@media (max-width: 768px) {
+    .terminal-title { font-size: 1.5rem; }
+    .terminal-link { font-size: 1.1rem; }
+    .log-date { display: none; } /* Esconde a data no celular pra caber o título */
+}
