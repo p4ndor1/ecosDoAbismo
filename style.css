@@ -752,41 +752,53 @@ figure.post-feature-image figcaption {
     margin-bottom: 10px;
 }
 
-/* --- COMBO DO CAOS: TV + GLITCH + TICKER --- */
+/* --- COMBO DO CAOS: TV + TICKER (Refinado) --- */
 
-/* 1. FUNDO COM CHIADO (TV STATIC) */
+/* 1. FUNDO COM CHIADO (TV STATIC) - Mais intenso */
 .recent-updates {
     position: relative;
-    overflow: hidden; /* Importante para o letreiro não vazar */
-    margin: 40px auto;
-    max-width: 1200px;
+    overflow: hidden;
+    margin: 60px 0; /* Espaço vertical maior */
     background-color: #dcdcdc; 
-    /* SVG de Ruído */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
-    box-shadow: inset 0 0 50px rgba(0,0,0,0.2); 
+    
+    /* Ruído SVG Aumentado (opacity 0.4 e frequency ajustada) */
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.4'/%3E%3C/svg%3E");
+    
+    box-shadow: inset 0 0 80px rgba(0,0,0,0.4); 
+    border: 3px double var(--ink-color);
+}
+
+/* EFEITO BREAKOUT (Estourar as margens simetricamente) */
+@media (min-width: 1000px) {
+    .recent-updates {
+        width: 110%; /* Fica 10% mais largo que o pai */
+        margin-left: -5%; /* Puxa 5% para a esquerda para centralizar */
+        /* Isso cria o efeito de sair da caixa simetricamente */
+    }
 }
 
 /* 2. O LETREIRO (NEWS TICKER) */
 .news-ticker-container {
-    background: var(--main-color); /* Fundo escuro */
-    color: var(--bg-color); /* Texto claro */
+    background: var(--main-color);
+    color: var(--bg-color);
     overflow: hidden;
     white-space: nowrap;
-    padding: 5px 0;
-    border-bottom: 1px solid var(--main-color);
+    padding: 8px 0;
+    border-bottom: 3px solid var(--highlight, #8B0000); /* Linha de sangue */
 }
 
 .news-ticker-wrapper {
     display: inline-block;
-    padding-left: 100%; /* Começa fora da tela */
-    animation: ticker-move 20s linear infinite; /* Velocidade do texto */
+    padding-left: 100%;
+    animation: ticker-move 25s linear infinite; /* Um pouco mais lento para ler */
 }
 
 .news-ticker-content {
     font-family: 'VT323', monospace;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: bold;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
 }
 
 @keyframes ticker-move {
@@ -794,135 +806,49 @@ figure.post-feature-image figcaption {
     100% { transform: translate3d(-100%, 0, 0); }
 }
 
-/* 3. INTERATIVIDADE DOS CARDS (HOVER SOMBRIO) */
+/* 3. CARDS RECENTES (Sem Inversão de Cor) */
 #home-latest-grid .hub-card {
     transition: all 0.2s ease;
-    background-color: rgba(255,255,255,0.6); /* Semi-transparente */
-    border: 1px solid var(--main-color);
+    background-color: rgba(255,255,255,0.7); 
+    border: 2px solid var(--main-color);
     position: relative;
     z-index: 2;
 }
 
-/* Efeito ao passar o mouse */
+/* Efeito Hover Sóbrio (Apenas Sombra e Escurecimento) */
 #home-latest-grid .hub-card:hover {
-    background-color: var(--main-color); /* Fica escuro */
-    color: var(--bg-color); /* Texto claro */
-    transform: scale(1.02); /* Cresce um pouco */
-    box-shadow: 5px 5px 0 var(--highlight, #8B0000); /* Sombra vermelha */
+    background-color: var(--bg-color); 
+    transform: translateY(-5px); /* Sobe um pouco */
+    box-shadow: 8px 8px 0 var(--highlight, #8B0000); /* Sombra dura vermelha */
     border-color: var(--highlight, #8B0000);
-}
-
-/* Ajusta as cores internas quando inverte */
-#home-latest-grid .hub-card:hover h3,
-#home-latest-grid .hub-card:hover p,
-#home-latest-grid .hub-card:hover .btn-retro {
-    color: var(--bg-color); 
-    border-color: var(--bg-color);
-}
-
-/* Inverte a imagem para parecer raio-x/fantasma */
-#home-latest-grid .hub-card:hover img {
-    filter: invert(1) grayscale(1); 
 }
 
 /* 4. O PISCA-PISCA (BLINK) */
 .blink {
-    background-color: #8B0000; /* Vermelho Sangue */
+    background-color: #8B0000;
     color: #fff;
     padding: 2px 8px;
     font-family: 'VT323';
     letter-spacing: 2px;
     animation: blinker 1s steps(2, start) infinite;
     font-weight: bold;
+    border: 1px solid #000;
 }
 
 @keyframes blinker {
     to { visibility: hidden; }
 }
-/* --- COMBO DO CAOS: TV + GLITCH + TICKER --- */
 
-/* 1. FUNDO COM CHIADO (TV STATIC) */
-.recent-updates {
-    position: relative;
-    overflow: hidden; /* Importante para o letreiro não vazar */
-    margin: 40px auto;
-    max-width: 1200px;
-    background-color: #dcdcdc; 
-    /* SVG de Ruído */
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
-    box-shadow: inset 0 0 50px rgba(0,0,0,0.2); 
-}
-
-/* 2. O LETREIRO (NEWS TICKER) */
-.news-ticker-container {
-    background: var(--main-color); /* Fundo escuro */
-    color: var(--bg-color); /* Texto claro */
-    overflow: hidden;
-    white-space: nowrap;
-    padding: 5px 0;
-    border-bottom: 1px solid var(--main-color);
-}
-
-.news-ticker-wrapper {
-    display: inline-block;
-    padding-left: 100%; /* Começa fora da tela */
-    animation: ticker-move 20s linear infinite; /* Velocidade do texto */
-}
-
-.news-ticker-content {
-    font-family: 'VT323', monospace;
-    font-size: 1.2rem;
-    font-weight: bold;
-    letter-spacing: 2px;
-}
-
-@keyframes ticker-move {
-    0% { transform: translate3d(0, 0, 0); }
-    100% { transform: translate3d(-100%, 0, 0); }
-}
-
-/* 3. INTERATIVIDADE DOS CARDS (HOVER SOMBRIO) */
-#home-latest-grid .hub-card {
-    transition: all 0.2s ease;
-    background-color: rgba(255,255,255,0.6); /* Semi-transparente */
-    border: 1px solid var(--main-color);
-    position: relative;
-    z-index: 2;
-}
-
-/* Efeito ao passar o mouse */
-#home-latest-grid .hub-card:hover {
-    background-color: var(--main-color); /* Fica escuro */
-    color: var(--bg-color); /* Texto claro */
-    transform: scale(1.02); /* Cresce um pouco */
-    box-shadow: 5px 5px 0 var(--highlight, #8B0000); /* Sombra vermelha */
-    border-color: var(--highlight, #8B0000);
-}
-
-/* Ajusta as cores internas quando inverte */
-#home-latest-grid .hub-card:hover h3,
-#home-latest-grid .hub-card:hover p,
-#home-latest-grid .hub-card:hover .btn-retro {
-    color: var(--bg-color); 
-    border-color: var(--bg-color);
-}
-
-/* Inverte a imagem para parecer raio-x/fantasma */
-#home-latest-grid .hub-card:hover img {
-    filter: invert(1) grayscale(1); 
-}
-
-/* 4. O PISCA-PISCA (BLINK) */
-.blink {
-    background-color: #8B0000; /* Vermelho Sangue */
-    color: #fff;
-    padding: 2px 8px;
-    font-family: 'VT323';
-    letter-spacing: 2px;
-    animation: blinker 1s steps(2, start) infinite;
-    font-weight: bold;
-}
-
-@keyframes blinker {
-    to { visibility: hidden; }
+/* RESPONSIVIDADE ESPECÍFICA PARA A SEÇÃO */
+@media (max-width: 768px) {
+    .recent-updates {
+        width: 100%; /* No celular volta ao normal */
+        margin-left: 0;
+        margin: 20px 0;
+        border-width: 2px;
+    }
+    
+    .news-ticker-content {
+        font-size: 1rem;
+    }
 }
