@@ -3,57 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="page-category" content="biblioteca"> <title>Biblioteca Proibida // ECOS DO ABISMO</title>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7176918895498029"
-     crossorigin="anonymous"></script>
+    <title>Biblioteca Proibida // ECOS</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../style.css">
-</head>
+    </head>
 <body>
-    <div id="alerta-global" onclick="this.classList.remove('mostrar')">
-    <p id="alerta-mensagem">Mensagem de teste</p>
-    <small>CLIQUE PARA FECHAR</small>
-</div>
-    <header class="main-header border-double">
-        <div class="header-meta"><span>VOL. 666</span><span>LIB.SYS</span></div>
-        <h1 class="glitch-title">
-    <a href="index.html" style="text-decoration:none;">
-        <img src="../img/favicon.png" alt="Ecos do Abismo" style="max-height: 50px; image-rendering: pixelated;">
-    </a>
-</h1>
-        <div class="header-meta"><span>SAO.PAULO</span><span>[REC]</span></div>
-    </header>
-
-    <nav class="main-nav border-simple">
-        <a href="../index.html" class="nav-item">:: INÍCIO</a>
-        <div class="nav-item dropdown">
-            <a href="biblioteca.html" class="dropbtn" style="background-color:var(--bg-color); color:var(--main-color)">:: BIBLIOTECA</a>
-            <div class="dropdown-content">
-                <a href="livros.html">Livros Malditos</a>
-                <a href="filmes.html">Filmes de Terror</a>
-                <a href="jogos.html">Jogos Obscuros</a>
-            </div>
-        </div>
-        <a href="crimes.html" class="nav-item">:: CRIMES REAIS</a>
-        <a href="darkweb.html" class="nav-item">:: DARK WEB</a>
-        <a href="assombracoes.html" class="nav-item">:: ASSOMBRAÇÕES</a>
-    </nav>
+    <div class="scanlines"></div>
 
     <main class="main-content">
         
         <aside class="sidebar border-simple">
-            <div class="ad-placeholder">
-                <span>[ ESPAÇO PUBLICITÁRIO ]</span>
-                <small>Google Adsense</small>
-            </div>
-            
+            <div class="ad-placeholder"><span>[ ADS ]</span></div>
+            <a href="../index.html" class="btn-retro" style="width:100%; margin-bottom:20px; text-align:center;">&lt; VOLTAR AO INÍCIO</a>
             <div id="recent-posts-sidebar" style="margin: 20px 0;"></div>
-
-            <div class="ad-placeholder skyscraper">
-                <span>[ ESPAÇO PUBLICITÁRIO ]</span>
-                <small>Vertical</small>
-            </div>
+            <div class="ad-placeholder skyscraper"><span>[ ADS ]</span></div>
         </aside>
 
         <div class="library-content-wrapper" style="width: 100%; overflow: hidden;">
@@ -64,6 +28,12 @@
                     <p class="hub-desc">Conhecimento amaldiçoado em todas as suas formas. Obras que desafiam a sanidade.</p>
                 </div>
             </header>
+
+            <section style="margin: 30px; padding: 0 15px;">
+                <p class="terminal-text">
+                    Nossa seção de Tomos Malditos é uma curadoria de obras que desafiam a sanidade. Aqui, analisamos a ficção gótica e o horror cósmico, examinando volumes que foram banidos, perdidos ou que, segundo a lenda, induzem à loucura. Estes não são apenas livros; são portais narrativos que contêm verdades inconvenientes sobre a fragilidade da mente humana e a insignificância da civilização diante do Vazio.
+                </p>
+            </section>
 
             <section id="livros" class="carousel-section">
                 <div class="carousel-header">
@@ -92,50 +62,50 @@
                 </div>
                 <div class="carousel-container" id="carousel-jogos">
                     <p class="terminal-text">Carregando cartuchos...</p>
+                </div>
+            </section>
+
+        </div>
+    </main>
 
     <footer class="main-footer border-double">
         <div class="footer-logo">ECOS_DO_ABISMO © 2025</div>
     </footer>
 
-    <script src="../db.js"></script>
-    <script type="module" src="../script.js"></script>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
+    <script type="module">
+        import { db, collection, getDocs, query } from '../firebase-config.js';
+
+        document.addEventListener('DOMContentLoaded', async () => {
             
-            // 1. Função Molde: Cria o HTML de um card
-            const criarCardLib = (post) => `
+            // Busca TODOS os posts do Firebase
+            const q = query(collection(db, "posts"));
+            const snapshot = await getDocs(q);
+            const posts = [];
+            snapshot.forEach(doc => posts.push({ id: doc.id, ...doc.data() }));
+
+            // Função para desenhar o card
+            const criarCard = (p) => `
                 <div class="lib-card">
                     <div class="lib-img-box">
-                        <img src="${post.imagem}" onerror="this.style.display='none'" alt="${post.titulo}">
+                        <img src="${p.imagem}" onerror="this.style.display='none'" alt="${p.titulo}">
                     </div>
-                    <h4>${post.titulo}</h4>
-                    <a href="${post.link}">ACESSAR</a>
+                    <h4>${p.titulo}</h4>
+                    <a href="../ver-post.html?id=${p.id}">ACESSAR</a>
                 </div>
             `;
 
-            // 2. Função Genérica: Preenche qualquer carrossel
-            function preencherCarrossel(categoria, idElemento) {
-                // Filtra o banco de dados pela categoria (ex: 'filmes')
-                const lista = postsDatabase.filter(p => p.categoria === categoria);
-                const container = document.getElementById(idElemento);
-
-                // Se achou itens, desenha os cards. Se não, avisa.
-                if (lista.length > 0) {
-                    container.innerHTML = lista.map(criarCardLib).join('');
-                } else {
-                    container.innerHTML = "<p class='terminal-text'>Dados corrompidos ou inexistentes neste setor.</p>";
-                }
+            // Preenche os carrosséis
+            const preencher = (cat, idElem) => {
+                const lista = posts.filter(p => p.categoria === cat);
+                const container = document.getElementById(idElem);
+                if(lista.length > 0) container.innerHTML = lista.map(criarCard).join('');
+                else container.innerHTML = "<p class='terminal-text'>Nada encontrado.</p>";
             }
 
-            // 3. Executar para as 3 categorias
-            // (Certifique-se que no db.js as categorias são 'livros', 'filmes', 'jogos')
-            preencherCarrossel('livros', 'carousel-livros');
-            preencherCarrossel('filmes', 'carousel-filmes');
-            preencherCarrossel('jogos', 'carousel-jogos');
+            preencher('livros', 'carousel-livros');
+            preencher('filmes', 'carousel-filmes');
+            preencher('jogos', 'carousel-jogos');
         });
     </script>
-</body>
-</html>
 </body>
 </html>
