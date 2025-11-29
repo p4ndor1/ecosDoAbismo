@@ -694,64 +694,6 @@ figure.post-feature-image figcaption {
     padding: 5px 10px;
 }
 
-/* --- JANELA DE ALERTA RETRÔ (Pop-up de Notificação) --- */
-#alerta-global {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 5000; 
-    background-color: var(--paper-color);
-    color: var(--ink-color);
-    border: 3px double var(--ink-color);
-    padding: 20px 30px;
-    font-family: var(--font-term);
-    max-width: 350px;
-    box-shadow: 8px 8px 0 rgba(0,0,0,0.5);
-    transition: transform 0.6s ease-out; /* Animação de deslize */
-    transform: translateX(120%); /* Começa fora da tela */
-    cursor: pointer;
-}
-
-#alerta-global.mostrar {
-    transform: translateX(0); /* Entra na tela */
-}
-
-#alerta-global.erro {
-    border-color: var(--highlight); /* Cor de destaque (vermelho) para erro */
-    color: var(--highlight);
-}
-
-/* --- MELHORIA DE TIPOGRAFIA DOS POSTS --- */
-.post-body {
-    font-size: 1.3rem; /* Texto um pouco maior */
-    line-height: 1.8;  /* Altura da linha maior para não cansar a vista */
-    text-align: justify; /* Alinhamento justificado (opcional, fica parecendo livro) */
-}
-
-/* Espaço generoso entre parágrafos */
-.post-body p {
-    margin-bottom: 25px; 
-}
-
-/* Espaço extra antes de subtítulos */
-.post-body h3 {
-    margin-top: 40px;
-    margin-bottom: 15px;
-    font-size: 1.8rem;
-    border-bottom: 1px dashed var(--dim-color);
-    padding-bottom: 5px;
-}
-
-/* Listas mais espaçadas */
-.post-body ul, .post-body ol {
-    margin-bottom: 25px;
-    padding-left: 40px;
-}
-
-.post-body li {
-    margin-bottom: 10px;
-}
-
 /* --- COMBO DO CAOS: TV + TICKER (Refinado) --- */
 
 /* 1. FUNDO COM CHIADO (TV STATIC) - Mais intenso */
