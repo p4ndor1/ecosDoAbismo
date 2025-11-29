@@ -1,14 +1,19 @@
-// script.js - Versão 5.0 (Com Destaques na Home)
-import { db, collection, getDocs, query, addDoc, orderBy, limit } from './firebase-config.js';
+// script.js - Versão Correção de Bug (Sem 'limit')
+// 1. REMOVEMOS O 'limit' DA IMPORTAÇÃO ABAIXO POIS ELE NÃO ESTAVA NO CONFIG
+import { db, collection, getDocs, query, addDoc, orderBy } from './firebase-config.js';
 
 // --- FUNÇÃO GLOBAL DE ALERTA ---
 window.mostrarAlerta = function(mensagem, tipo = 'sucesso') {
     const alerta = document.getElementById('alerta-global');
-    const msg = document.getElementById('alerta-mensagem');
+    // Se não tiver o elemento HTML do alerta, usa o alert() comum para não travar
     if (!alerta) return alert(mensagem); 
+    
+    const msg = document.getElementById('alerta-mensagem');
     msg.innerText = mensagem;
+    
     alerta.classList.remove('erro');
     if (tipo === 'erro') alerta.classList.add('erro');
+    
     alerta.classList.add('mostrar');
     setTimeout(() => alerta.classList.remove('mostrar'), 5000);
 }
@@ -46,28 +51,42 @@ const htmlCardGrande = (post) => `
 
 document.addEventListener('DOMContentLoaded', async () => {
     
-    // --- 1. CARREGAMENTO DE CONTEÚDO (HOME, HUBS E SIDEBAR) ---
+    // Elementos da página
     const categoryTag = document.querySelector('meta[name="page-category"]');
     const sidebarContainer = document.getElementById('recent-posts-sidebar');
     const hubContainer = document.getElementById('category-hub-grid');
-    const homeGrid = document.getElementById('home-latest-grid'); // Novo container da Home
+    const homeGrid = document.getElementById('home-latest-grid');
 
     // Só busca no banco se tiver onde exibir
     if (sidebarContainer || hubContainer || homeGrid) {
         try {
-            // Pega todos os posts (em um app maior, usaríamos 'limit' e paginação)
-            const q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
+            // Tenta buscar ordenado. 
+            // SE DER ERRO AQUI, é porque tem posts antigos sem o campo 'timestamp'
+            let q;
+            try {
+                q = query(collection(db, "posts"), orderBy("timestamp", "desc"));
+            } catch (e) {
+                console.warn("Erro na ordenação (talvez falte índice ou timestamp), buscando sem ordem:", e);
+                q = query(collection(db, "posts")); // Fallback: busca sem ordem se der ruim
+            }
+
             const querySnapshot = await getDocs(q);
             
             let todosPosts = [];
             querySnapshot.forEach((doc) => {
+                // Garante que pegamos o ID e os dados
                 todosPosts.push({ id: doc.id, ...doc.data() });
             });
+
+            // Se não achou nada (ou banco vazio)
+            if (todosPosts.length === 0) {
+                console.log("Nenhum post encontrado no banco de dados.");
+            }
 
             // A. Lógica da HOME (Posts Recentes)
             if (homeGrid) {
                 homeGrid.innerHTML = "";
-                // Pega os 3 primeiros (mais recentes)
+                // Pega os 3 primeiros
                 todosPosts.slice(0, 3).forEach(post => {
                     homeGrid.innerHTML += htmlCardGrande(post);
                 });
@@ -76,6 +95,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             // B. Lógica de PÁGINAS INTERNAS (Hubs e Sidebar)
             if (categoryTag) {
                 const categoriaAtual = categoryTag.content;
+                // Filtra pela categoria
                 const postsFiltrados = todosPosts.filter(post => post.categoria === categoriaAtual);
 
                 // Sidebar
@@ -89,7 +109,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 // Grid Principal do Hub
                 if (hubContainer) {
                     hubContainer.innerHTML = "";
-                    if(postsFiltrados.length === 0) hubContainer.innerHTML = "<p class='terminal-text'>Nenhum arquivo encontrado.</p>";
+                    if(postsFiltrados.length === 0) {
+                        hubContainer.innerHTML = "<p class='terminal-text'>Nenhum arquivo encontrado nesta frequência.</p>";
+                    }
                     postsFiltrados.forEach(post => {
                         hubContainer.innerHTML += htmlCardGrande(post);
                     });
@@ -97,7 +119,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
         } catch (error) {
-            console.error("Erro ao carregar posts:", error);
+            console.error("ERRO CRÍTICO AO CARREGAR POSTS:", error);
+            if(hubContainer) hubContainer.innerHTML = "<p>ERRO DE CONEXÃO. Verifique o console (F12).</p>";
         }
     }
 
@@ -119,10 +142,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                     origem: window.location.pathname, 
                     data: new Date()
                 });
-                mostrarAlerta("VÍNCULO ESTABELECIDO. AGUARDE NOSSOS SINAIS.");
+                // Verifica se a função existe antes de chamar
+                if (typeof window.mostrarAlerta === "function") {
+                    mostrarAlerta("VÍNCULO ESTABELECIDO. AGUARDE NOSSOS SINAIS.");
+                } else {
+                    alert("VÍNCULO ESTABELECIDO.");
+                }
                 newsForm.reset(); 
             } catch (erro) {
-                mostrarAlerta("FALHA NO VÍNCULO. TENTE NOVAMENTE.", 'erro');
+                console.error("Erro newsletter:", erro);
+                if (typeof window.mostrarAlerta === "function") {
+                    mostrarAlerta("FALHA NO VÍNCULO. TENTE NOVAMENTE.", 'erro');
+                } else {
+                    alert("FALHA NO VÍNCULO.");
+                }
             } finally {
                 btn.innerText = textoOriginal;
                 btn.disabled = false;
