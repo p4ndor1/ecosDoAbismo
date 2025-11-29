@@ -694,22 +694,26 @@ figure.post-feature-image figcaption {
     padding: 5px 10px;
 }
 
-/* --- DESTAQUES HOME: CARROSSEL LIMPO --- */
+/* --- DESTAQUES HOME: LIMPO E SEM VERMELHO --- */
 
+/* 1. O CONTAINER PRINCIPAL */
 .recent-updates {
     margin: 40px auto;
     max-width: 1200px;
-    background-color: rgba(59, 46, 37, 0.05); /* Fundo sutil apenas para separar */
-    overflow: hidden; /* Contém o letreiro */
+    /* Força o fundo a ser transparente ou levemente bege, NUNCA branco ou cinza de TV */
+    background-color: rgba(59, 46, 37, 0.05) !important; 
+    border: 4px double var(--main-color) !important; /* Borda dupla marrom */
+    overflow: hidden;
+    box-shadow: none !important; /* Remove sombras coloridas */
 }
 
-/* 1. LETREIRO (Cores da Paleta Original) */
+/* 2. O LETREIRO (TICKER) - MARROM E BEGE */
 .news-ticker-container {
-    background: var(--main-color); /* Marrom */
-    color: var(--bg-color); /* Bege */
+    background-color: var(--main-color) !important; /* Fundo Marrom */
+    color: var(--bg-color) !important; /* Texto Bege */
     overflow: hidden;
     white-space: nowrap;
-    padding: 5px 0;
+    padding: 8px 0;
     border-bottom: 1px solid var(--dim-color);
 }
 
@@ -721,8 +725,9 @@ figure.post-feature-image figcaption {
 
 .news-ticker-content {
     font-family: 'VT323', monospace;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     letter-spacing: 2px;
+    font-weight: normal;
 }
 
 @keyframes ticker-move {
@@ -730,34 +735,56 @@ figure.post-feature-image figcaption {
     100% { transform: translate3d(-100%, 0, 0); }
 }
 
-/* 2. INDICADOR AO VIVO (Piscando Sutil) */
+/* 3. O BOTÃO "AO VIVO" - SEM VERMELHO */
 .live-badge {
-    background-color: var(--main-color);
-    color: var(--bg-color);
-    padding: 2px 8px;
+    background-color: var(--main-color) !important; /* Fundo Marrom */
+    color: var(--bg-color) !important; /* Texto Bege */
+    padding: 5px 10px;
     font-family: 'VT323';
     font-size: 1rem;
-    border: 1px solid var(--main-color);
+    border: 1px solid var(--bg-color);
+    text-transform: uppercase;
+    font-weight: bold;
 }
 
-/* 3. AJUSTE DO CARROSSEL DA HOME */
+/* Animação de piscar apenas a opacidade, sem mudar cor */
+.blink {
+    animation: blinker 2s linear infinite;
+    background-color: var(--main-color) !important; /* Garante que não fique vermelho */
+}
+
+@keyframes blinker {
+    50% { opacity: 0.5; }
+}
+
+/* 4. O CARROSSEL E OS CARDS */
 #home-latest-grid {
     display: flex;
     gap: 20px;
-    overflow-x: auto; /* Scroll Horizontal */
-    padding-bottom: 20px; /* Espaço para scrollbar */
+    overflow-x: auto;
+    padding: 20px 0; /* Espaço para não cortar a sombra */
     scroll-behavior: smooth;
 }
 
-/* Força os cards a terem tamanho fixo para o carrossel funcionar */
+/* Força os cards a serem BEGE */
 #home-latest-grid .hub-card {
-    min-width: 300px; /* Largura fixa */
+    min-width: 300px;
     max-width: 300px;
-    flex-shrink: 0; /* Não deixa encolher */
-    background-color: var(--bg-color); /* Garante leitura */
+    flex-shrink: 0;
+    background-color: var(--bg-color) !important; /* Fundo Bege */
+    border: 1px solid var(--dim-color) !important;
+    color: var(--main-color) !important;
+    box-shadow: none !important; /* Remove sombra vermelha */
 }
 
-/* Scrollbar Bonita (igual biblioteca) */
+/* Efeito ao passar o mouse: Sóbrio */
+#home-latest-grid .hub-card:hover {
+    border-color: var(--main-color) !important;
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0 rgba(59, 46, 37, 0.2) !important; /* Sombra marrom suave */
+}
+
+/* Scrollbar do carrossel */
 #home-latest-grid::-webkit-scrollbar { height: 8px; }
-#home-latest-grid::-webkit-scrollbar-track { background: var(--bg-color); }
+#home-latest-grid::-webkit-scrollbar-track { background: rgba(59, 46, 37, 0.1); }
 #home-latest-grid::-webkit-scrollbar-thumb { background-color: var(--main-color); border-radius: 4px; }
