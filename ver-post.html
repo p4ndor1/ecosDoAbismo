@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Carregando Arquivo... // ECOS DO ABISMO</title>
+    <title>Lendo Arquivo... // ECOS</title>
     <link rel="icon" type="image/png" href="favicon.png">
     
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7176918895498029"
-     crossorigin="anonymous"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7176918895498029" crossorigin="anonymous"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=VT323&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
@@ -16,17 +15,15 @@
 </head>
 <body>
     <div id="alerta-global" onclick="this.classList.remove('mostrar')">
-    <p id="alerta-mensagem">Mensagem de teste</p>
-    <small>CLIQUE PARA FECHAR</small>
-</div>
+        <p id="alerta-mensagem"></p><small>FECHAR</small>
+    </div>
+
     <div class="scanlines"></div>
 
     <div class="interface-container">
         <header class="main-header border-double">
             <div class="header-meta"><span>VOL. 666</span><span>LEITURA.EXE</span></div>
-            <h1 class="glitch-title">
-    <a href="index.html" style="color:inherit; text-decoration:none;">Ecos do Abismo</a>
-</h1>
+            <h1 class="glitch-title"><a href="index.html" style="color:inherit; text-decoration:none;">Ecos do Abismo</a></h1>
             <div class="header-meta"><span>SAO.PAULO</span><span>[REC]</span></div>
         </header>
 
@@ -35,9 +32,7 @@
             <div class="nav-item dropdown">
                 <a href="pages/biblioteca.html" class="dropbtn">:: BIBLIOTECA</a>
                 <div class="dropdown-content">
-                    <a href="pages/livros.html">Livros</a>
-                    <a href="pages/filmes.html">Filmes</a>
-                    <a href="pages/jogos.html">Jogos</a>
+                    <a href="pages/livros.html">Livros</a><a href="pages/filmes.html">Filmes</a><a href="pages/jogos.html">Jogos</a>
                 </div>
             </div>
             <a href="pages/crimes.html" class="nav-item">:: CRIMES REAIS</a>
@@ -47,16 +42,16 @@
 
         <main class="main-content">
             <aside class="sidebar border-simple">
-                <div class="ad-placeholder"><span>[ ESPAÇO PUBLICITÁRIO ]</span><small>Google Adsense</small></div>
-                
-                <div id="recent-posts-sidebar" style="margin-top: 30px;"></div>
-                
-                <div class="ad-placeholder skyscraper"><span>[ ESPAÇO PUBLICITÁRIO ]</span><small>Vertical</small></div>
+                <div class="ad-placeholder"><span>[ ADS ]</span></div>
+                <div id="recent-posts-sidebar" style="margin-top: 30px;"></div> 
+                <div class="ad-placeholder skyscraper"><span>[ ADS ]</span></div>
             </aside>
 
             <article class="hero-section border-simple" style="display: block; text-align: left;">
                 
-                <div id="loading-msg" class="terminal-text blink">BAIXANDO DADOS DO SERVIDOR...</div>
+                <div id="loading-msg" class="terminal-text" style="padding:20px; text-align:center;">
+                    <span class="blink">ACESSANDO ARQUIVOS CRIPTOGRAFADOS...</span>
+                </div>
                 
                 <div id="post-content" style="display: none;">
                     <header class="post-header">
@@ -67,13 +62,12 @@
                     </header>
 
                     <figure class="post-feature-image">
-                        <img id="p-imagem" src="" alt="">
+                        <img id="p-imagem" src="" alt="Evidência Visual">
                         <figcaption>FIG. 1: Registro Visual.</figcaption>
                     </figure>
                     <div class="separator">-----------------------------</div>
 
-                    <div class="post-body terminal-text" id="p-texto">
-                        </div>
+                    <div class="post-body terminal-text" id="p-texto"></div>
 
                     <div class="separator" style="margin-top: 30px;">-----------------------------</div>
 
@@ -93,28 +87,25 @@
             </article>
         </main>
 
-        <footer class="main-footer border-double">
-            <div class="footer-logo">ECOS_DO_ABISMO © 2025</div>
-        </footer>
+        <footer class="main-footer border-double"><div class="footer-logo">ECOS_DO_ABISMO © 2025</div></footer>
     </div>
 
     <script type="module">
         import { db, doc, getDoc, collection, addDoc, getDocs, query, orderBy } from './firebase-config.js';
-        import './script.js'; 
+        
+        // Importa o script lateral com tratamento de erro caso falhe
+        try { import('./script.js'); } catch(e) { console.warn("Script lateral não carregou", e); }
 
         const params = new URLSearchParams(window.location.search);
         const postID = params.get('id'); 
 
-        // --- ARMADILHA ANTI-PÁGINA VAZIA ---
-        // Se não tem ID, manda de volta pra home imediatamente
-        if (!postID) {
-            window.location.href = "index.html"; 
-        } else {
-            carregarPost();
-        }
-        // -----------------------------------
-
         async function carregarPost() {
+            // SE NÃO TIVER ID NA URL:
+            if (!postID) {
+                mostrarErro("ERRO 400: NENHUM ID FORNECIDO NA URL.");
+                return;
+            }
+
             try {
                 const docRef = doc(db, "posts", postID);
                 const docSnap = await getDoc(docRef);
@@ -125,57 +116,67 @@
                     document.title = data.titulo + " // ECOS";
                     document.getElementById('p-titulo').innerText = data.titulo;
                     document.getElementById('p-data').innerText = data.data;
-                    document.getElementById('p-meta').innerText = `ARQUIVO: #${postID.slice(0,4).toUpperCase()} // CATEGORIA: ${data.categoria.toUpperCase()}`;
+                    document.getElementById('p-meta').innerText = `ARQUIVO: #${postID.slice(0,6).toUpperCase()} // CATEGORIA: ${data.categoria.toUpperCase()}`;
                     
-                    // Se tiver imagem, mostra. Se não, esconde a tag para não ficar quadrado quebrado
-                    if(data.imagem) {
+                    // Imagem
+                    if(data.imagem && data.imagem.includes('http')) {
                         document.getElementById('p-imagem').src = data.imagem;
                     } else {
                         document.querySelector('.post-feature-image').style.display = 'none';
                     }
                     
                     document.getElementById('p-texto').innerHTML = data.conteudo;
-                    document.querySelector('meta[name="page-category"]').setAttribute("content", data.categoria);
+                    
+                    // Tenta atualizar meta tag se existir
+                    const metaCat = document.querySelector('meta[name="page-category"]');
+                    if(metaCat) metaCat.setAttribute("content", data.categoria);
 
+                    // Sucesso: Mostra o post
                     document.getElementById('loading-msg').style.display = 'none';
                     document.getElementById('post-content').style.display = 'block';
 
                     carregarComentarios();
 
                 } else {
-                    // Se o ID não existe (link quebrado), manda pra home também
-                    window.location.href = "index.html";
+                    // ERRO: ID não encontrado no banco
+                    mostrarErro(`ERRO 404: ARQUIVO NÃO ENCONTRADO NO SERVIDOR.<br>ID Buscado: ${postID}<br><br>Este arquivo pode ter sido deletado.`);
                 }
             } catch (e) {
                 console.error(e);
-                document.getElementById('loading-msg').innerText = "FALHA DE CONEXÃO.";
+                mostrarErro("ERRO 500: FALHA CRÍTICA DE CONEXÃO.<br>" + e.message);
             }
         }
-        
-        // ... (Mantenha o resto do código de comentários aqui) ...
 
-        // --- SISTEMA DE COMENTÁRIOS (Vinculado ao ID) ---
+        function mostrarErro(msg) {
+            const div = document.getElementById('loading-msg');
+            div.innerHTML = `<h2 style="color:red; background:rgba(0,0,0,0.8); padding:20px; border:2px solid red;">${msg}</h2><br><a href="index.html" class="btn-retro">VOLTAR PARA SEGURANÇA</a>`;
+            div.style.display = 'block';
+        }
+        
+        // --- COMENTÁRIOS ---
         const form = document.getElementById('comment-form');
         const commentsList = document.getElementById('comments-list');
 
         async function carregarComentarios() {
             commentsList.innerHTML = "<p>Buscando...</p>";
-            const q = query(collection(db, "comentarios"), orderBy("data", "desc"));
-            const querySnapshot = await getDocs(q);
-            commentsList.innerHTML = "";
-            let count = 0;
-            querySnapshot.forEach((doc) => {
-                const c = doc.data();
-                if(c.postReferencia === postID) { // Agora compara com o ID do Firebase!
-                    const div = document.createElement('div');
-                    div.style.borderBottom = "1px dashed var(--dim-color)";
-                    div.style.marginBottom = "10px";
-                    div.innerHTML = `<strong style="color:var(--dim-color)">> ${c.nome}</strong>: ${c.mensagem}`;
-                    commentsList.appendChild(div);
-                    count++;
-                }
-            });
-            if(count===0) commentsList.innerHTML = "<p>Sem sinais.</p>";
+            try {
+                const q = query(collection(db, "comentarios"), orderBy("data", "desc"));
+                const querySnapshot = await getDocs(q);
+                commentsList.innerHTML = "";
+                let count = 0;
+                querySnapshot.forEach((doc) => {
+                    const c = doc.data();
+                    if(c.postReferencia === postID) { 
+                        const div = document.createElement('div');
+                        div.style.borderBottom = "1px dashed var(--dim-color)";
+                        div.style.marginBottom = "10px";
+                        div.innerHTML = `<strong style="color:var(--dim-color)">> ${c.nome}</strong>: ${c.mensagem}`;
+                        commentsList.appendChild(div);
+                        count++;
+                    }
+                });
+                if(count===0) commentsList.innerHTML = "<p>Sem sinais.</p>";
+            } catch(e) { console.log("Sem comentários ainda ou erro de índice."); }
         }
 
         form.addEventListener('submit', async (e) => {
@@ -186,6 +187,9 @@
             form.reset();
             carregarComentarios();
         });
+
+        // Inicia
+        carregarPost();
     </script>
 </body>
 </html>
