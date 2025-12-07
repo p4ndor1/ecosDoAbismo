@@ -145,7 +145,6 @@ body {
     .main-content { grid-template-columns: 1fr; }
     .sidebar { order: 2; }
     .hub-content-wrapper { order: 1; }
-    .newsletter-content { flex-direction: column; }
     
     .main-header, .main-nav { flex-direction: column; text-align: center; gap: 10px; }
     .nav-item, .dropdown { width: 100%; border-bottom: 1px solid var(--bg-color); }
@@ -157,6 +156,47 @@ body {
     /* Dropdown no celular empurra conteúdo */
     .dropdown-content { position: relative; width: 100%; border: none; background: rgba(0,0,0,0.1); box-shadow: none; }
     .dropdown:hover .dropdown-content { display: block; }
+    /* --- CORREÇÃO NEWSLETTER MOBILE --- */
+    .newsletter-section {
+        padding: 15px; /* Menos espaçamento interno */
+        margin-top: 20px;
+    }
+
+    .newsletter-content {
+        flex-direction: column; /* Empilha: Texto em cima, Imagem embaixo */
+        gap: 20px;
+    }
+
+    .newsletter-text {
+        width: 100%; /* Ocupa tudo */
+        min-width: auto; /* Remove a trava de 300px */
+        flex: 1;
+        text-align: center; /* Centraliza texto no mobile */
+    }
+
+    .newsletter-text h2 {
+        font-size: 2rem; /* Diminui o título gigante */
+    }
+
+    .newsletter-image {
+        width: 100%;
+        min-width: auto;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    /* Ajuste do Formulário no Mobile */
+    .retro-form {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .retro-form input, 
+    .retro-form button {
+        width: 100%; /* Garante que o botão e input não vazem */
+        max-width: 100%;
+    }
 }
 
 /* --- CARROSSEL BIBLIOTECA --- */
