@@ -1,3 +1,5 @@
+/* --- ESTILO MESTRE: ECOS DO ABISMO --- */
+
 :root {
     --bg-color: #C8CDB9;
     --main-color: #3B2E25;
@@ -25,6 +27,7 @@ body {
     background-size: 100% 4px; pointer-events: none; z-index: 999;
 }
 
+/* --- CONTAINER PRINCIPAL --- */
 .interface-container {
     width: 100%; max-width: 1200px; margin: 0 auto;
     display: flex; flex-direction: column; gap: 15px;
@@ -40,73 +43,71 @@ body {
 .glitch-title { font-family: var(--font-gothic); font-size: 4rem; text-transform: uppercase; text-align: center; line-height: 0.8; margin: 10px 0; }
 .header-meta { font-size: 1rem; display: flex; flex-direction: column; color: var(--dim-color); font-weight: bold; }
 
-/* --- NAV & DROPDOWN (CORRIGIDO) --- */
+/* --- NAV (MENU) --- */
 .main-nav { display: flex; justify-content: space-around; padding: 10px 0; background-color: var(--main-color); border: 1px solid var(--main-color); flex-wrap: wrap; position: relative; }
-
 .nav-item { text-decoration: none; color: var(--bg-color); font-size: 1.5rem; padding: 5px 15px; display: inline-block; }
 .nav-item:hover { color: var(--main-color); background-color: var(--bg-color); }
 
-/* Dropdown Container */
+/* Dropdown */
 .dropdown { position: relative; display: inline-block; }
-
-/* O Botão do Dropdown */
 .dropbtn { color: inherit; text-decoration: none; display: block; width: 100%; height: 100%; }
-
-/* O Menu que abre */
 .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: var(--bg-color);
-    border: 2px solid var(--main-color);
-    min-width: 180px;
-    z-index: 2000;
-    top: 100%; left: 0;
+    display: none; position: absolute;
+    background-color: var(--bg-color); border: 2px solid var(--main-color);
+    min-width: 180px; z-index: 2000; top: 100%; left: 0;
     box-shadow: 4px 4px 0 rgba(0,0,0,0.2);
 }
-
-.dropdown-content a {
-    color: var(--main-color);
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    border-bottom: 1px dashed var(--dim-color);
-}
-
+.dropdown-content a { color: var(--main-color); padding: 12px 16px; text-decoration: none; display: block; border-bottom: 1px dashed var(--dim-color); }
 .dropdown-content a:hover { background-color: var(--main-color); color: var(--bg-color); }
-
-/* Hover para abrir */
 .dropdown:hover .dropdown-content { display: block; }
 
-/* --- LAYOUT GRID --- */
+/* --- LAYOUT GRID (SIDEBAR + CONTEÚDO) --- */
 .main-content {
     display: grid;
-    grid-template-columns: 220px 1fr; 
+    grid-template-columns: 220px 1fr; /* Sidebar fixa | Resto fluido */
     gap: 15px;
     min-height: 50vh;
 }
 
 .sidebar { padding: 20px; display: flex; flex-direction: column; gap: 20px; height: fit-content; }
 
-/* --- HERO & CONTENT --- */
+/* --- HERO (HOME) --- */
 .hero-section { padding: 40px; text-align: center; background: radial-gradient(circle, transparent 0%, rgba(59,46,37,0.05) 100%); }
-.hero-image { max-width: 100%; height: auto; margin-bottom: 20px; border: 2px solid var(--main-color); }
+.hero-image { max-width: 100%; height: auto; margin-bottom: 20px; border: 2px solid var(--main-color); display: block; margin-left: auto; margin-right: auto; }
 .gothic-sub { font-family: var(--font-gothic); font-size: 3.5rem; line-height: 1; margin-bottom: 10px; }
 .terminal-text { font-size: 1.4rem; line-height: 1.4; }
 .btn-retro { display: inline-block; text-decoration: none; color: var(--bg-color); background-color: var(--main-color); padding: 10px 30px; font-size: 1.6rem; border: 2px solid var(--main-color); margin-top: 20px; transition: 0.2s; }
 .btn-retro:hover { background: transparent; color: var(--main-color); box-shadow: 4px 4px 0 var(--dim-color); transform: translate(-2px, -2px); }
 
-/* --- TERMINAL HOME --- */
+/* --- HERO (HUBS) --- */
+.hub-hero { 
+    position: relative; width: 100%; height: 350px; 
+    background-size: cover; background-position: top center; /* Foca no topo da imagem */
+    border-bottom: 4px double var(--main-color); margin-bottom: 20px; 
+    display: flex; align-items: center; justify-content: center; 
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
+}
+.hub-overlay { background-color: rgba(5, 5, 5, 0.85); padding: 30px; border: 2px solid var(--main-color); text-align: center; max-width: 90%; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
+.hub-title { font-family: var(--font-term); font-weight: bold; font-size: 3.5rem; color: var(--main-color); text-shadow: 2px 2px 0 #000; margin: 0; line-height: 1; }
+.hub-desc { font-family: var(--font-term); font-size: 1.3rem; color: var(--bg-color); margin-top: 10px; text-shadow: 1px 1px 0 #000; }
+
+/* --- CARDS & POSTS --- */
+.hub-card { border: 1px solid var(--dim-color); padding: 10px; display: flex; flex-direction: column; background: rgba(59, 46, 37, 0.05); transition: 0.2s; }
+.hub-card:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 rgba(0,0,0,0.1); }
+.hub-card img { width: 100%; height: 180px; object-fit: cover; border: 1px solid var(--dim-color); margin-bottom: 10px; }
+
+/* --- TERMINAL HOME (Logs) --- */
 .system-logs { background: #050505; border: 4px double var(--main-color); padding: 20px; margin: 20px 0; }
 .logs-header { color: var(--bg-color); display: flex; justify-content: space-between; border-bottom: 1px dashed #333; margin-bottom: 10px; }
 .terminal-title { font-size: 1.5rem; margin: 0; font-family: 'VT323'; text-transform: uppercase; }
 .terminal-list { list-style: none; }
-.terminal-link { color: var(--bg-color); text-decoration: none; display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #333; font-size: 1.2rem; }
-.terminal-link:hover { padding-left: 10px; font-weight: bold; background: #111; }
+.terminal-link { color: var(--bg-color); text-decoration: none; display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #333; font-size: 1.2rem; transition: 0.2s; }
+.terminal-link:hover { padding-left: 10px; font-weight: bold; background: #111; color: var(--main-color); }
 .log-date { color: var(--dim-color); font-size: 0.9rem; }
 .blink { animation: blinker 1s infinite; } @keyframes blinker { 50% { opacity: 0; } }
 
 /* --- NEWSLETTER --- */
-.newsletter-section { margin-top: 20px; padding: 20px; border: 4px double var(--main-color); display: flex; flex-wrap: wrap; gap: 20px; align-items: center; }
+.newsletter-section { margin-top: 20px; padding: 20px; border: 4px double var(--main-color); display: flex; flex-wrap: wrap; gap: 20px; align-items: center; background: rgba(59, 46, 37, 0.05); }
 .newsletter-content { display: flex; gap: 20px; width: 100%; flex-wrap: wrap; }
 .newsletter-text { flex: 2; min-width: 300px; }
 .newsletter-image { flex: 1; display: flex; justify-content: center; min-width: 200px; }
@@ -121,31 +122,55 @@ body {
 .main-footer ul { list-style: none; }
 .main-footer a { text-decoration: none; color: var(--main-color); }
 
-/* --- RESPONSIVIDADE --- */
-@media (max-width: 768px) {
-    .main-content { grid-template-columns: 1fr; }
-    .sidebar { order: 2; }
-    .newsletter-content { flex-direction: column; }
-    .main-header, .main-nav { flex-direction: column; text-align: center; gap: 10px; }
-    .nav-item, .dropdown { width: 100%; border-bottom: 1px solid var(--bg-color); }
-    .dropbtn { padding: 10px; }
-    
-    /* Dropdown no celular empurra conteúdo */
-    .dropdown-content { position: relative; width: 100%; border: none; background: rgba(0,0,0,0.1); box-shadow: none; }
-}
-
-/* --- EXTRAS --- */
+/* --- EXTRAS & ADSENSE --- */
 .ad-placeholder { width: 100%; min-height: 250px; background: rgba(0,0,0,0.05); border: 1px dashed var(--dim-color); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
 .ad-placeholder.skyscraper { min-height: 400px; }
 
-/* POP-UP */
+/* --- ALERTA POP-UP --- */
 #alerta-global {
     position: fixed; top: 20px; right: 20px; z-index: 5000; 
     background-color: var(--bg-color); color: var(--main-color);
     border: 3px double var(--main-color); padding: 20px 30px;
     font-family: var(--font-term); font-size: 1.2rem;
     box-shadow: 8px 8px 0 rgba(0,0,0,0.2);
-    transform: translateX(150%); transition: transform 0.5s ease; cursor: pointer;
+    /* Inicia FORA da tela */
+    transform: translateX(150%); 
+    transition: transform 0.5s ease; cursor: pointer;
 }
-#alerta-global.mostrar { transform: translateX(0); }
+#alerta-global.mostrar { transform: translateX(0); } /* Entra na tela */
 #alerta-global.erro { border-color: red; color: red; }
+
+/* --- RESPONSIVIDADE (MOBILE) --- */
+@media (max-width: 768px) {
+    .main-content { grid-template-columns: 1fr; }
+    .sidebar { order: 2; }
+    .hub-content-wrapper { order: 1; }
+    .newsletter-content { flex-direction: column; }
+    
+    .main-header, .main-nav { flex-direction: column; text-align: center; gap: 10px; }
+    .nav-item, .dropdown { width: 100%; border-bottom: 1px solid var(--bg-color); }
+    .dropbtn { padding: 10px; }
+    
+    .glitch-title { font-size: 3rem; }
+    .hub-title { font-size: 2.5rem; }
+    
+    /* Dropdown no celular empurra conteúdo */
+    .dropdown-content { position: relative; width: 100%; border: none; background: rgba(0,0,0,0.1); box-shadow: none; }
+    .dropdown:hover .dropdown-content { display: block; }
+}
+
+/* --- CARROSSEL BIBLIOTECA --- */
+.carousel-section { margin-bottom: 50px; padding: 0 10px; }
+.carousel-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 15px; border-bottom: 2px solid var(--dim-color); padding-bottom: 5px; }
+.carousel-container { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scroll-behavior: smooth; }
+.carousel-container::-webkit-scrollbar { height: 8px; }
+.carousel-container::-webkit-scrollbar-track { background: var(--bg-color); }
+.carousel-container::-webkit-scrollbar-thumb { background-color: var(--main-color); border-radius: 4px; }
+
+.lib-card { min-width: 200px; max-width: 200px; border: 1px solid var(--dim-color); padding: 10px; background-color: rgba(59, 46, 37, 0.05); flex-shrink: 0; }
+.lib-img-box { width: 100%; height: 250px; background: #000; margin-bottom: 10px; overflow: hidden; }
+.lib-img-box img { width: 100%; height: 100%; object-fit: cover; }
+.lib-card h4 { font-family: var(--font-gothic); font-size: 1.2rem; height: 3rem; overflow: hidden; margin-bottom: 10px; }
+.lib-card a { display: block; text-align: center; background: var(--main-color); color: var(--bg-color); text-decoration: none; padding: 5px; font-family: var(--font-term); }
+.lib-card a:hover { background: transparent; color: var(--main-color); border: 1px solid var(--main-color); }
+.btn-retro.is-small { font-size: 1rem; padding: 5px 10px; }
