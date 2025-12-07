@@ -140,6 +140,21 @@ body {
 #alerta-global.mostrar { transform: translateX(0); } /* Entra na tela */
 #alerta-global.erro { border-color: red; color: red; }
 
+* 1. Regra para PC (Desktop) */
+.post-body img {
+    display: block !important;          /* Transforma em bloco para centralizar */
+    margin: 20px auto !important;       /* Centraliza na tela */
+    
+    max-width: 100% !important;         /* Nunca deixa vazar para fora do texto */
+    
+    /* Aqui está o segredo para não ficar GIGANTE no PC: */
+    width: auto !important;             /* Usa o tamanho natural... */
+    max-height: 500px !important;       /* ...mas trava se passar de 500px de altura */
+    
+    height: auto !important;            /* Mantém a proporção */
+    border: 1px solid var(--dim-color) !important;
+    background-color: #000;
+}
 /* --- RESPONSIVIDADE (MOBILE) --- */
 /* --- RESPONSIVIDADE FINAL (MOBILE) --- */
 @media (max-width: 768px) {
@@ -239,12 +254,17 @@ body {
     }
     /* --- CORREÇÃO DE IMAGENS MOBILE --- */
     .post-body img {
-        width: 100% !important;      /* FORÇA ocupar a largura toda do celular */
+        /* No celular, queremos que ocupe a largura TOTAL para não ficar minusculo */
+        width: 100% !important;         
         max-width: 100% !important;
-        height: auto !important;     /* Altura automática */
-        max-height: none !important; /* Remove o limite de altura do PC */
+        
+        /* Removemos o limite de altura para não achatar a imagem esticada */
+        max-height: none !important;    
+        height: auto !important;
+        
         margin: 15px 0 !important;
     }
+}
 }
 /* --- CARROSSEL BIBLIOTECA --- */
 .carousel-section { margin-bottom: 50px; padding: 0 10px; }
