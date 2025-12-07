@@ -215,6 +215,35 @@ body {
         box-shadow: none; 
     }
     .dropdown:hover .dropdown-content { display: block; }
+    /* --- CORREÇÃO DE IMAGENS NOS POSTS (MOBILE) --- */
+    
+    /* 1. Imagem de Destaque (Topo do Post) */
+    figure.post-feature-image {
+        width: 100% !important;
+        margin: 10px 0 !important;
+        padding: 0 !important;
+        box-sizing: border-box !important;
+    }
+
+    figure.post-feature-image img {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    /* 2. Imagens dentro do Texto (Corpo do Post) */
+    .post-body img {
+        max-width: 100% !important; /* Nunca maior que a tela */
+        width: auto !important;     /* Se for pequena, fica pequena */
+        height: auto !important;    /* Mantém a proporção */
+        display: block;
+        margin: 15px auto;          /* Centraliza */
+    }
+
+    /* 3. Vídeos (Youtube) se houver */
+    .post-body iframe, 
+    .post-body video {
+        max-width: 100% !important;
+    }
 }
 
 /* --- CARROSSEL BIBLIOTECA --- */
