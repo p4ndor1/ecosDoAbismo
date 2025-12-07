@@ -1,778 +1,113 @@
 :root {
-    /* PALETA "PERGAMINHO DIGITAL / GAMEBOY" */
-    --bg-color: #C8CDB9; /* Verde Areia/Antigo */
-    --main-color: #3B2E25; /* Marrom Café Escuro */
-    --dim-color: #695A4D; /* Marrom desbotado */
+    --bg-color: #C8CDB9;
+    --main-color: #3B2E25;
+    --dim-color: #695A4D;
     --border-color: #3B2E25;
-    
     --font-gothic: "Jacquard 12", system-ui;
     --font-term: "VT323", monospace;
 }
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
     background-color: var(--bg-color);
     color: var(--main-color);
     font-family: var(--font-term);
-    min-height: 100vh; /* Permite crescer conforme o conteúdo */
+    min-height: 100vh;
     line-height: 1.2;
     padding: 20px;
-    /* Removemos o overflow:hidden para permitir scroll */
 }
 
-/* --- EFEITO CRT SCANLINES (Adaptado para fundo claro) --- */
 .scanlines {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(
-        to bottom,
-        rgba(255,255,255,0),
-        rgba(255,255,255,0) 50%,
-        rgba(59, 46, 37, 0.1) 50%, /* Linhas marrons bem fraquinhas */
-        rgba(59, 46, 37, 0.1)
-    );
-    background-size: 100% 4px;
-    pointer-events: none;
-    z-index: 999;
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(59, 46, 37, 0.1) 50%);
+    background-size: 100% 4px; pointer-events: none; z-index: 999;
 }
 
-/* --- CONTAINER PRINCIPAL --- */
 .interface-container {
-    width: 100%;
-    max-width: 1200px; /* Um pouco mais largo */
-    margin: 0 auto; /* Centraliza na tela */
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    border: 2px solid var(--border-color);
-    padding: 10px;
+    width: 100%; max-width: 1200px; margin: 0 auto;
+    display: flex; flex-direction: column; gap: 15px;
+    border: 2px solid var(--border-color); padding: 10px;
     background-color: var(--bg-color);
 }
 
-/* --- UTILITÁRIOS DE BORDA --- */
-.border-simple {
-    border: 1px solid var(--border-color);
-}
-.border-double {
-    border: 4px double var(--border-color);
-}
+.border-simple { border: 1px solid var(--border-color); }
+.border-double { border: 4px double var(--border-color); }
 
 /* --- HEADER --- */
-.main-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    flex-wrap: wrap; /* Permite quebrar linha se a tela for muito pequena */
-}
-
-.glitch-title {
-    font-family: var(--font-gothic);
-    font-size: 4rem;
-    font-weight: normal;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-align: center;
-    line-height: 0.8;
-}
-
-.header-meta {
-    font-size: 1rem;
-    display: flex;
-    flex-direction: column;
-    color: var(--dim-color);
-    font-weight: bold;
-}
-
-.header-meta:last-child {
-    text-align: right;
-}
+.main-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; flex-wrap: wrap; }
+.glitch-title { font-family: var(--font-gothic); font-size: 4rem; text-transform: uppercase; text-align: center; line-height: 0.8; margin: 10px 0; }
+.header-meta { font-size: 1rem; display: flex; flex-direction: column; color: var(--dim-color); font-weight: bold; }
 
 /* --- NAV --- */
-.main-nav {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 10px 0;
-    background-color: var(--main-color); /* Fundo marrom */
-    border: 1px solid var(--main-color);
-    flex-wrap: wrap;
-}
+.main-nav { display: flex; justify-content: space-around; padding: 10px 0; background-color: var(--main-color); border: 1px solid var(--main-color); flex-wrap: wrap; }
+.nav-item { text-decoration: none; color: var(--bg-color); font-size: 1.5rem; padding: 5px 15px; }
+.nav-item:hover { color: var(--main-color); background-color: var(--bg-color); }
 
-.nav-item {
-    text-decoration: none;
-    color: var(--bg-color); /* Texto cor de areia */
-    font-size: 1.5rem;
-    padding: 5px 15px;
-    transition: all 0.2s;
-}
-
-.nav-item:hover {
-    color: var(--main-color);
-    background-color: var(--bg-color);
-}
-
-/* --- MAIN CONTENT --- */
+/* --- GRID LAYOUT (IMPORTANTE) --- */
 .main-content {
     display: grid;
-    grid-template-columns: 220px 1fr; /* Sidebar fixa, resto fluido */
+    grid-template-columns: 220px 1fr; /* Sidebar | Conteúdo */
     gap: 15px;
     min-height: 50vh;
 }
 
 /* Sidebar */
-.sidebar {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+.sidebar { padding: 20px; display: flex; flex-direction: column; gap: 20px; height: fit-content; }
 
-.ascii-art {
-    white-space: pre;
-    font-family: monospace;
-    font-size: 12px;
-    color: var(--main-color);
-    font-weight: bold;
-    align-self: center;
-}
+/* --- HERO & CONTENT --- */
+.hero-section { padding: 40px; text-align: center; background: radial-gradient(circle, transparent 0%, rgba(59,46,37,0.05) 100%); }
+.gothic-sub { font-family: var(--font-gothic); font-size: 3.5rem; line-height: 1; margin-bottom: 10px; }
+.terminal-text { font-size: 1.4rem; line-height: 1.4; }
+.btn-retro { display: inline-block; text-decoration: none; color: var(--bg-color); background-color: var(--main-color); padding: 10px 30px; font-size: 1.6rem; border: 2px solid var(--main-color); margin-top: 20px; }
+.btn-retro:hover { background: transparent; color: var(--main-color); box-shadow: 4px 4px 0 var(--dim-color); }
 
-.status-list p {
-    margin-bottom: 8px;
-    border-bottom: 1px dashed var(--dim-color);
-}
+.hub-hero { position: relative; width: 100%; height: 300px; background-size: cover; background-position: center; border-bottom: 4px double var(--main-color); margin-bottom: 20px; display: flex; align-items: center; justify-content: center; }
+.hub-overlay { background-color: rgba(5, 5, 5, 0.85); padding: 30px; border: 2px solid var(--main-color); text-align: center; max-width: 90%; box-shadow: 0 0 20px rgba(0,0,0,0.8); }
+.hub-title { font-family: var(--font-term); font-weight: bold; font-size: 4rem; color: var(--main-color); text-shadow: 2px 2px 0 #000; margin: 0; line-height: 1; }
+.hub-desc { font-family: var(--font-term); font-size: 1.4rem; color: var(--bg-color); margin-top: 10px; }
 
-.blink {
-    animation: blinker 1s steps(2, start) infinite;
-    background-color: var(--main-color);
-    color: var(--bg-color);
-    padding: 0 2px;
-}
+/* --- CARDS --- */
+.hub-card { border: 1px solid var(--dim-color); padding: 10px; display: flex; flex-direction: column; background: rgba(59, 46, 37, 0.05); }
+.hub-card img { width: 100%; height: 150px; object-fit: cover; border: 1px solid var(--dim-color); margin-bottom: 10px; }
 
-@keyframes blinker {
-    to { visibility: hidden; }
+/* --- ALERTA POP-UP --- */
+#alerta-global {
+    position: fixed; top: 20px; right: 20px; z-index: 5000; 
+    background-color: var(--bg-color); color: var(--main-color);
+    border: 3px double var(--main-color); padding: 20px 30px;
+    font-family: var(--font-term); font-size: 1.2rem;
+    box-shadow: 8px 8px 0 rgba(0,0,0,0.2);
+    transform: translateX(150%); transition: transform 0.5s ease; cursor: pointer;
 }
+#alerta-global.mostrar { transform: translateX(0); }
+#alerta-global.erro { border-color: red; color: red; }
 
-/* Hero Section */
-.hero-section {
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    background-image: radial-gradient(circle, transparent 0%, rgba(59, 46, 37, 0.05) 100%); /* Leve vinheta */
-}
-
-.gothic-sub {
-    font-family: var(--font-gothic);
-    font-size: 3.5rem;
-    margin-bottom: 10px;
-    line-height: 1;
-}
-
-.separator {
-    color: var(--dim-color);
-    margin-bottom: 20px;
-    font-weight: bold;
-}
-
-.terminal-text {
-    font-size: 1.4rem;
-    line-height: 1.4;
-    max-width: 100%;
-}
-
-.btn-retro {
-    margin-top: 30px;
-    display: inline-block;
-    text-decoration: none;
-    color: var(--bg-color);
-    background-color: var(--main-color);
-    padding: 10px 30px;
-    font-size: 1.6rem;
-    border: 2px solid var(--main-color);
-    transition: 0.3s;
-    cursor: pointer;
-}
-
-.btn-retro:hover {
-    background-color: transparent;
-    color: var(--main-color);
-    box-shadow: 4px 4px 0px var(--dim-color);
-    transform: translate(-2px, -2px);
-}
-
-/* --- FOOTER --- */
-.main-footer {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px;
-    font-size: 1.1rem;
-    background-color: rgba(59, 46, 37, 0.05);
-}
-
-.main-footer ul {
-    list-style: none;
-    margin-top: 10px;
-}
-
-.main-footer a {
-    color: var(--main-color);
-    text-decoration: none;
-    display: block;
-}
-.main-footer a:hover {
-    text-decoration: underline;
-    font-weight: bold;
-}
-
-/* --- RESPONSIVIDADE (MOBILE) --- */
+/* --- RESPONSIVIDADE --- */
 @media (max-width: 768px) {
-    body {
-        padding: 5px;
-    }
-
-    .interface-container {
-        border: none; /* Remove borda externa no mobile pra ganhar espaço */
-        padding: 0;
-        gap: 10px;
-    }
-
-    .main-header {
-        flex-direction: column;
-        gap: 10px;
-        text-align: center;
-    }
-
-    .header-meta {
-        width: 100%;
-        text-align: center !important;
-        flex-direction: row;
-        justify-content: space-between;
-    }
+    .main-content { grid-template-columns: 1fr; } /* Coluna única no mobile */
+    .sidebar { order: 2; }
+    .hub-content-wrapper { order: 1; }
+    .main-header, .main-nav { flex-direction: column; text-align: center; gap: 10px; }
+    .nav-item { width: 100%; border-bottom: 1px solid var(--bg-color); }
+    .glitch-title { font-size: 3rem; }
+    .hub-title { font-size: 2.5rem; }
     
-    .glitch-title {
-        font-size: 3rem;
-        margin: 10px 0;
-    }
-
-    .main-nav {
-        flex-direction: column;
-        gap: 5px;
-    }
-    
-    .nav-item {
-        width: 100%;
-        text-align: center;
-        border-bottom: 1px solid var(--bg-color);
-    }
-
-    .main-content {
-        grid-template-columns: 1fr; /* Coluna única */
-    }
-
-    .sidebar {
-        order: 2; /* Joga a sidebar pro final da página no mobile */
-        border-top: 1px solid var(--main-color);
-    }
-
-    .hero-section {
-        padding: 20px;
-        order: 1;
-    }
-
-    .gothic-sub {
-        font-size: 2.5rem;
-    }
-    
-    .terminal-text {
-        font-size: 1.2rem;
-    }
-
-    .main-footer {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
-    }
+    /* Dropdown Mobile Fix */
+    .dropdown { width: 100%; display: block; }
+    .dropbtn { width: 100%; display: block; padding: 10px; }
+    .dropdown-content { position: relative; width: 100%; border: none; background: rgba(0,0,0,0.1); }
+    .dropdown:hover .dropdown-content { display: block; }
 }
 
-/* --- ESTILO DOS PLACEHOLDERS DE ANÚNCIO --- */
-.ad-placeholder {
-    width: 100%;
-    min-height: 250px; /* Tamanho padrão de quadrado */
-    background-color: rgba(59, 46, 37, 0.1); /* Fundo levemente escuro */
-    border: 1px dashed var(--dim-color);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: var(--dim-color);
-    font-family: var(--font-term);
-    text-align: center;
-}
-
-.ad-placeholder.skyscraper {
-    min-height: 400px; /* Tamanho vertical */
-    flex-grow: 1; /* Ocupa o resto do espaço se tiver */
-}
-/* Estilo da imagem de destaque */
-.hero-image {
-    width: 100%; /* Ocupa a largura disponível */
-    max-width: 400px; /* Mas não deixa ficar gigante em telas grandes */
-    height: auto; /* Mantém a proporção */
-    display: block;
-    margin: 0 auto 20px auto; /* Centraliza e dá espaço embaixo */
-    border: 2px solid var(--main-color); /* Uma borda fina para combinar */
-    filter: sepia(0.5) contrast(1.2); /* Um filtro extra para garantir que ela "case" com o site */
-}
-
-/* --- NEWSLETTER --- */
-.newsletter-section {
-    width: 100%;
-    max-width: 1200px;
-    margin: 20px auto; /* Espaço entre o main e o footer */
-    background-color: var(--bg-color);
-    padding: 30px;
-}
-
-.newsletter-content {
-    display: flex;
-    flex-wrap: wrap; /* Quebra linha no mobile */
-    align-items: center;
-    gap: 30px;
-}
-
-.newsletter-text {
-    flex: 2; /* Ocupa mais espaço que a imagem */
-}
-
-.newsletter-image {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-}
-
-.pixel-art-img {
-    width: 100%;
-    max-width: 250px;
-    image-rendering: pixelated; /* Garante que os pixels fiquem nítidos */
-    border: 1px dashed var(--main-color);
-    filter: sepia(1) hue-rotate(50deg) contrast(0.8); /* Ajuste de cor para ficar esverdeado/marrom */
-}
-
-/* Formulário Retrô */
-.retro-form {
-    margin-top: 20px;
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.retro-form input {
-    flex-grow: 1;
-    background-color: transparent;
-    border: 2px solid var(--dim-color);
-    color: var(--main-color);
-    font-family: var(--font-term);
-    font-size: 1.2rem;
-    padding: 10px;
-    outline: none;
-}
-
-.retro-form input:focus {
-    border-color: var(--main-color);
-    background-color: rgba(59, 46, 37, 0.1);
-}
-
-.retro-form button {
-    background-color: var(--main-color);
-    color: var(--bg-color);
-    font-family: var(--font-term);
-    font-size: 1.2rem;
-    border: 2px solid var(--main-color);
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.retro-form button:hover {
-    background-color: transparent;
-    color: var(--main-color);
-    box-shadow: 3px 3px 0 var(--dim-color);
-}
-/* --- ESTILO DA IMAGEM DENTRO DO POST --- */
-figure.post-feature-image {
-    margin: 20px 0;
-    width: 100%;
-    border: 1px solid var(--dim-color);
-    padding: 5px;
-    background-color: rgba(59, 46, 37, 0.05);
-}
-
-figure.post-feature-image img {
-    width: 100%;
-    height: auto;
-    display: block;
-    /* Filtros para deixar a imagem com cara de velha/arquivo */
-    filter: sepia(0.8) contrast(1.1) grayscale(0.2); 
-    border: 1px solid var(--dim-color);
-}
-
-figure.post-feature-image figcaption {
-    font-family: var(--font-term);
-    font-size: 0.9rem;
-    color: var(--dim-color);
-    margin-top: 5px;
-    text-align: center;
-    font-style: italic;
-    border-top: 1px dashed var(--dim-color);
-    padding-top: 5px;
-}
-/* --- DROPDOWN MENU --- */
-
-.dropbtn {
-    color: var(--bg-color); /* Mesma cor dos outros itens */
-    text-decoration: none;
-    cursor: pointer;
-    font-family: var(--font-term);
-    font-size: 1.5rem;
-    background: none;
-    border: none;
-    padding: 5px 15px;
-}
-/* Quando passa o mouse no botão principal */
-.dropdown:hover .dropbtn {
-    color: var(--main-color);
-    background-color: var(--bg-color);
-}
-
-/* Adicionar uma setinha via CSS para indicar que abre */
-.dropbtn::after {
-    content: " ▼"; /* Caractere de seta */
-    font-size: 0.8rem;
-    vertical-align: middle;
-}
-
-
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown-content {
-    display: none; /* Escondido por padrão */
-    position: absolute;
-    background-color: var(--bg-color);
-    border: 2px solid var(--main-color);
-    min-width: 160px;
-    z-index: 1000;
-    top: 100%; /* Aparece logo abaixo */
-    left: 0;
-    box-shadow: 4px 4px 0px var(--dim-color);
-}
-
-.dropdown-content a {
-    color: var(--main-color);
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    border-bottom: 1px dashed var(--dim-color);
-    font-size: 1.2rem;
-}
-
-.dropdown-content a:hover {
-    background-color: var(--main-color);
-    color: var(--bg-color);
-}
-
-/* Mostrar ao passar o mouse */
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-/* --- HERO DAS PÁGINAS HUB (ATUALIZADO) --- */
-.hub-hero {
-    position: relative;
-    width: 100%;
-    height: 300px;
-    background-size: cover;
-    background-position: center;
-    border-bottom: 4px double var(--main-color);
-    margin-bottom: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.hub-overlay {
-    background-color: rgba(5, 5, 5, 0.85); /* Mais escuro para destacar o texto claro */
-    padding: 30px;
-    border: 2px solid var(--main-color); /* Borda mais grossa */
-    text-align: center;
-    max-width: 90%; /* Ocupa mais espaço na tela */
-    backdrop-filter: blur(4px);
-    box-shadow: 0 0 20px rgba(0,0,0,0.8);
-}
-
-.hub-title {
-    font-family: var(--font-term); /* Mudado para Terminal */
-    font-weight: bold; /* Negrito */
-    font-size: 4rem; /* Grande no Desktop */
-    color: var(--main-color); /* Cor marrom/café */
-    text-shadow: 2px 2px 0px #000; /* Sombra dura para leitura */
-    margin-bottom: 15px;
-    text-transform: uppercase;
-    letter-spacing: 4px; /* Espaçamento "confidencial" */
-    line-height: 1;
-}
-
-.hub-desc {
-    font-family: var(--font-term);
-    font-size: 1.4rem;
-    color: var(--bg-color); /* Texto claro (areia) */
-    text-shadow: 1px 1px 0 #000;
-}
-
-/* --- RESPONSIVIDADE DO HERO (Novo) --- */
-/* --- RESPONSIVIDADE GERAL (MOBILE) --- */
-@media (max-width: 768px) {
-    
-    /* 1. Ajustes do Hero para Celular */
-    .hub-hero {
-        height: 250px;
-    }
-    .hub-overlay {
-        padding: 15px;
-        width: 95%;
-    }
-    .hub-title {
-        font-size: 2.2rem;
-        letter-spacing: 1px;
-    }
-    .hub-desc {
-        font-size: 1rem;
-    }
-
-    /* 2. MENU MOBILE SIMPLIFICADO (Conserta o botão da biblioteca) */
-    .nav-item {
-        width: 100%;
-        text-align: center;
-        border-bottom: 1px solid var(--bg-color);
-        padding: 10px 0; /* Espaço para o dedo */
-    }
-
-    /* O Dropdown vira um bloco simples */
-    .dropdown {
-        display: block;
-        width: 100%;
-        padding: 0;
-        border-bottom: 1px solid var(--bg-color);
-    }
-
-    /* O botão principal do dropdown ocupa tudo */
-    .dropbtn {
-        width: 100%;
-        display: block;
-        padding: 10px 0;
-    }
-
-    /* O conteúdo abre empurrando para baixo */
-    .dropdown-content {
-        position: relative;
-        width: 100%;
-        box-shadow: none;
-        border: none;
-        background-color: rgba(0,0,0,0.2);
-        display: none;
-    }
-    
-    /* Remove bordas duplas nos links internos */
-    .dropdown-content a {
-        border-bottom: 1px dotted var(--dim-color);
-    }
-    
-    /* Faz o menu aparecer ao passar o mouse ou clicar */
-    .dropdown:hover .dropdown-content {
-        display: block;
-    }
-}
-/* --- CARROSSEL BIBLIOTECA --- */
-.carousel-section {
-    margin-bottom: 50px;
-    padding: 0 10px;
-}
-
-.carousel-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 15px;
-    border-bottom: 2px solid var(--dim-color);
-    padding-bottom: 5px;
-}
-
-.carousel-container {
-    display: flex;
-    gap: 20px;
-    overflow-x: auto; /* Permite scroll horizontal */
-    padding-bottom: 20px; /* Espaço para a barra de rolagem */
-    scroll-behavior: smooth;
-    /* Estilização da barra de rolagem (Firefox) */
-    scrollbar-width: thin;
-    scrollbar-color: var(--main-color) var(--bg-color);
-}
-
-/* Estilização da barra de rolagem (Chrome/Webkit) */
-.carousel-container::-webkit-scrollbar {
-    height: 8px;
-}
-.carousel-container::-webkit-scrollbar-track {
-    background: var(--bg-color);
-}
-.carousel-container::-webkit-scrollbar-thumb {
-    background-color: var(--main-color);
-    border-radius: 4px;
-}
-
-.lib-card {
-    min-width: 200px; /* Tamanho fixo do card */
-    max-width: 200px;
-    border: 1px solid var(--dim-color);
-    padding: 10px;
-    background-color: rgba(59, 46, 37, 0.05);
-    flex-shrink: 0; /* Impede que o card encolha */
-}
-
-.lib-img-box {
-    width: 100%;
-    height: 250px; /* Capa vertical */
-    background: #000;
-    margin-bottom: 10px;
-    overflow: hidden;
-}
-
-.lib-img-box img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.lib-card h4 {
-    font-family: var(--font-gothic);
-    font-size: 1.2rem;
-    height: 3rem; /* Altura fixa para alinhar */
-    overflow: hidden;
-    margin-bottom: 10px;
-}
-
-.lib-card a {
-    display: block;
-    text-align: center;
-    background: var(--main-color);
-    color: var(--bg-color);
-    text-decoration: none;
-    font-family: var(--font-term);
-    padding: 5px;
-}
-.lib-card a:hover {
-    background: transparent;
-    color: var(--main-color);
-    border: 1px solid var(--main-color);
-}
-
-.btn-retro.is-small {
-    font-size: 1rem;
-    padding: 5px 10px;
-}
-
-/* --- TERMINAL DE LOGS (Home) --- */
-.system-logs {
-    max-width: 900px;
-    margin: 40px auto;
-    background-color: #050505; /* Fundo Preto Hacker */
-    border: 4px double var(--main-color); /* Borda dupla Marrom */
-    padding: 25px;
-    box-shadow: 10px 10px 0 rgba(0,0,0,0.3);
-}
-
-.logs-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid var(--dim-color);
-    padding-bottom: 15px;
-    margin-bottom: 20px;
-    color: var(--bg-color); /* Cor Bege */
-}
-
-/* Novo estilo do Título: Legível e Bold */
-.terminal-title {
-    font-family: 'VT323', monospace; /* Fonte de computador */
-    font-weight: bold;
-    font-size: 2.2rem; /* Bem grande */
-    margin: 0;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--bg-color);
-    text-shadow: 2px 2px 0 #000;
-}
-
-.terminal-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.terminal-list li {
-    padding: 12px 0;
-    border-bottom: 1px dashed #333; /* Linha pontilhada sutil */
-}
-
-/* O Link do Post na lista */
-.terminal-link {
-    text-decoration: none;
-    color: var(--bg-color); /* Bege */
-    font-family: 'VT323', monospace;
-    font-size: 1.4rem; /* Texto da lista grande */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: 0.2s;
-}
-
-.terminal-link:hover {
-    color: #050505; /* Texto Preto */
-    background-color: var(--bg-color); /* Fundo Bege */
-    padding-left: 15px; /* Pulo para a direita */
-    font-weight: bold;
-}
-
-.log-date {
-    color: var(--dim-color);
-    font-size: 1rem;
-    font-family: monospace;
-}
-
-/* Cursor piscando */
-.blink { 
-    font-size: 2rem;
-    color: var(--bg-color);
-    animation: blinker 1s step-end infinite; 
-}
-@keyframes blinker { 50% { opacity: 0; } }
-
-/* Responsividade do Terminal */
-@media (max-width: 768px) {
-    .terminal-title { font-size: 1.5rem; }
-    .terminal-link { font-size: 1.1rem; }
-    .log-date { display: none; } /* Esconde a data no celular pra caber o título */
-}
+/* --- ADSENSE & EXTRAS --- */
+.ad-placeholder { width: 100%; min-height: 250px; background: rgba(0,0,0,0.05); border: 1px dashed var(--dim-color); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+.newsletter-section { margin-top: 20px; padding: 20px; }
+.retro-form input { width: 100%; background: transparent; border: 2px solid var(--dim-color); padding: 10px; font-family: var(--font-term); font-size: 1.2rem; margin-top: 10px; }
+.retro-form button { width: 100%; background: var(--main-color); color: var(--bg-color); padding: 10px; font-family: var(--font-term); font-size: 1.2rem; margin-top: 10px; cursor: pointer; }
+.system-logs { background: #050505; border: 4px double var(--main-color); padding: 20px; margin: 20px 0; }
+.logs-header { color: var(--bg-color); display: flex; justify-content: space-between; border-bottom: 1px dashed #333; margin-bottom: 10px; }
+.terminal-title { font-size: 1.5rem; margin: 0; }
+.terminal-list { list-style: none; }
+.terminal-link { color: var(--bg-color); text-decoration: none; display: block; padding: 5px 0; border-bottom: 1px solid #333; }
+.blink { animation: blinker 1s infinite; } @keyframes blinker { 50% { opacity: 0; } }

@@ -3,88 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>livros // ECOS DO ABISMO</title>
-    <link rel="icon" type="image/png" href="../favicon.png">
-
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7176918895498029"
-     crossorigin="anonymous"></script>
+    <title>Filmes // ECOS DO ABISMO</title> <link rel="icon" type="image/png" href="../favicon.png">
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7176918895498029" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css2?family=Jacquard+12&family=VT323&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="../style.css">
     
-    <meta name="page-category" content="livros">
+    <meta name="page-category" content="filmes">
 </head>
 <body>
-    <div id="alerta-global" onclick="this.classList.remove('mostrar')">
-    <p id="alerta-mensagem">Mensagem de teste</p>
-    <small>CLIQUE PARA FECHAR</small>
-</div>
+    <div id="alerta-global" onclick="this.classList.remove('mostrar')"><p id="alerta-mensagem"></p><small>X</small></div>
     <div class="scanlines"></div>
 
-    <header class="main-header border-double">
-        <div class="header-meta">
-            <span>VOL. 666</span>
-            <span>HUB.SYSTEM</span>
-        </div>
-        <h1 class="glitch-title">
-    <a href="../index.html" style="color:inherit; text-decoration:none;">Ecos do Abismo</a>
-</h1>
-        <div class="header-meta">
-            <span>SAO.PAULO</span>
-            <span>[REC]</span>
-        </div>
-    </header>
-    <section class="intro-text border-simple" style="margin: 20px; padding: 20px; background: rgba(59, 46, 37, 0.05);">
-    <h3 style="font-family: 'Jacquard 12'; font-size: 1.5rem;">Páginas que carregam mistérios</h3>
-    <p class="terminal-text">
-        Nossa seção de Tomos Malditos é uma curadoria de obras que desafiam a sanidade. Aqui, analisamos a ficção gótica e o horror cósmico, examinando volumes que foram banidos, perdidos ou que, segundo a lenda, induzem à loucura. Estes não são apenas livros; são portais narrativos que contêm verdades inconvenientes sobre a fragilidade da mente humana e a insignificância da civilização diante do Vazio. Use o painel para encontrar resenhas e indicações literárias que prometem noites mal dormidas.
-    </p>
-</section>
-
-    <nav class="main-nav border-simple">
-        <a href="../index.html" class="nav-item">:: INÍCIO</a>
-        
-         <div class="nav-item dropdown">
-            <a href="assombracoes.html" class="nav-item" style="background-color:var(--bg-color); color:var(--main-color)">:: BIBLIOTECA</a>
-            <div class="dropdown-content">
-                <a href="livros.html">Livros Malditos</a>
-                <a href="filmes.html">Filmes De Terror</a>
-                <a href="jogos.html">Jogos Obscuros</a>
-            </div>
-        </div>
-
-        <a href="crimes.html" class="nav-item">:: CRIMES REAIS</a>
-        <a href="darkweb.html" class="nav-item">:: DARK WEB</a>
-        <a href="assombracoes.html" class="nav-item">:: ASSOMBRAÇÕES</a>
-    </nav>
-
-    <main class="interface-container" style="display: block; border: none; padding: 0; background: transparent;">
-        
-        <header class="hub-hero" style="background-image: url('../img/livros/hero-bg.png'); background-color: #111;">
-            <div class="hub-overlay">
-                <h1 class="hub-title">ACERVO: TOMOS MALDITOS</h1>
-                <p class="hub-desc">
-                    Análises de clássicos do horror, ficção estranha e tomos que você deve (ou não) ler antes de morrer.
-                </p>
-            </div>
+    <div class="interface-container">
+        <header class="main-header border-double">
+            <div class="header-meta"><span>VOL. 666</span><span>HUB.SYS</span></div>
+            <h1 class="glitch-title"><a href="../index.html" style="color:inherit; text-decoration:none;">Ecos do Abismo</a></h1>
+            <div class="header-meta"><span>SAO.PAULO</span><span>[REC]</span></div>
         </header>
-        
-        <div class="interface-container" style="border: none;">
-             <div id="category-hub-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
-                 <p class="terminal-text" style="grid-column: 1/-1; text-align: center;">Buscando arquivos no servidor...</p>
-             </div>
-        </div>
 
-    </main>
+        <nav class="main-nav border-simple">
+            <a href="../index.html" class="nav-item">:: INÍCIO</a>
+            <div class="nav-item dropdown">
+                <a href="biblioteca.html" class="dropbtn">:: BIBLIOTECA</a>
+                <div class="dropdown-content">
+                    <a href="livros.html">Livros</a><a href="filmes.html">Filmes</a><a href="jogos.html">Jogos</a>
+                </div>
+            </div>
+            <a href="crimes.html" class="nav-item">:: CRIMES REAIS</a>
+            <a href="darkweb.html" class="nav-item">:: DARK WEB</a>
+            <a href="assombracoes.html" class="nav-item">:: ASSOMBRAÇÕES</a>
+        </nav>
 
-    <footer class="main-footer border-double">
-        <div class="footer-logo">ECOS_DO_ABISMO © 2025</div>
-    </footer>
+        <main class="main-content">
+            
+            <aside class="sidebar border-simple">
+                <div class="ad-placeholder"><span>[ ADS ]</span></div>
+                <div id="recent-posts-sidebar"></div> <div class="ad-placeholder skyscraper"><span>[ ADS ]</span></div>
+            </aside>
 
-    <script src="../db.js"></script> 
+            <div class="hub-content-wrapper">
+                <header class="hub-hero" style="background-image: url('../img/MUDE_A_PASTA/hero-bg.png'); background-color: #111;">
+                    <div class="hub-overlay">
+                        <h1 class="hub-title">ACERVO: TOMOS MALDITOS</h1>
+                        <p class="hub-desc">Análises de clássicos do horror, ficção estranha e tomos que você deve (ou não) ler antes de morrer.</p>
+                    </div>
+                </header>
+
+                <section class="intro-text border-simple" style="margin-bottom: 20px; padding: 20px; background: rgba(59, 46, 37, 0.05);">
+                    <h3 style="font-family: 'Jacquard 12'; font-size: 1.5rem;">Páginas que carregam mistérios</h3>
+                    <p class="terminal-text">Nossa seção de Tomos Malditos é uma curadoria de obras que desafiam a sanidade. Aqui, analisamos a ficção gótica e o horror cósmico, examinando volumes que foram banidos, perdidos ou que, segundo a lenda, induzem à loucura. Estes não são apenas livros; são portais narrativos que contêm verdades inconvenientes sobre a fragilidade da mente humana e a insignificância da civilização diante do Vazio. Use o painel para encontrar resenhas e indicações literárias que prometem noites mal dormidas.</p>
+                </section>
+                
+                <div id="category-hub-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+                     <p class="terminal-text" style="grid-column: 1/-1; text-align: center;">Carregando arquivos...</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="main-footer border-double"><div class="footer-logo">ECOS_DO_ABISMO © 2025</div></footer>
+    </div>
+
     <script type="module" src="../script.js"></script>
 </body>
 </html>
