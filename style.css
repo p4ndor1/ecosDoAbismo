@@ -1,13 +1,18 @@
-/* --- ESTILO MESTRE: ECOS DO ABISMO --- */
+/* =========================================
+   ECOS DO ABISMO - ARQUIVO MESTRE CSS
+   ========================================= */
 
 :root {
+    /* PALETA DE CORES */
     --bg-color: #C8CDB9;
     --main-color: #3B2E25;
     --dim-color: #695A4D;
     --border-color: #3B2E25;
+    --highlight: #8B0000;
+    
+    /* TIPOGRAFIA */
     --font-gothic: "Jacquard 12", system-ui;
     --font-term: "VT323", monospace;
-    --highlight: #8B0000;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -17,10 +22,11 @@ body {
     color: var(--main-color);
     font-family: var(--font-term);
     min-height: 100vh;
-    line-height: 1.2;
+    line-height: 1.4; /* Leitura melhor */
     padding: 20px;
 }
 
+/* Efeito TV */
 .scanlines {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: linear-gradient(to bottom, rgba(255,255,255,0) 50%, rgba(59, 46, 37, 0.1) 50%);
@@ -43,7 +49,7 @@ body {
 .glitch-title { font-family: var(--font-gothic); font-size: 4rem; text-transform: uppercase; text-align: center; line-height: 0.8; margin: 10px 0; }
 .header-meta { font-size: 1rem; display: flex; flex-direction: column; color: var(--dim-color); font-weight: bold; }
 
-/* --- NAV (MENU) --- */
+/* --- MENU (NAV) --- */
 .main-nav { display: flex; justify-content: space-around; padding: 10px 0; background-color: var(--main-color); border: 1px solid var(--main-color); flex-wrap: wrap; position: relative; }
 .nav-item { text-decoration: none; color: var(--bg-color); font-size: 1.5rem; padding: 5px 15px; display: inline-block; }
 .nav-item:hover { color: var(--main-color); background-color: var(--bg-color); }
@@ -61,17 +67,16 @@ body {
 .dropdown-content a:hover { background-color: var(--main-color); color: var(--bg-color); }
 .dropdown:hover .dropdown-content { display: block; }
 
-/* --- LAYOUT GRID (SIDEBAR + CONTEÚDO) --- */
+/* --- GRID LAYOUT --- */
 .main-content {
     display: grid;
-    grid-template-columns: 220px 1fr; /* Sidebar fixa | Resto fluido */
+    grid-template-columns: 220px 1fr;
     gap: 15px;
     min-height: 50vh;
 }
-
 .sidebar { padding: 20px; display: flex; flex-direction: column; gap: 20px; height: fit-content; }
 
-/* --- HERO (HOME) --- */
+/* --- HERO & CONTENT --- */
 .hero-section { padding: 40px; text-align: center; background: radial-gradient(circle, transparent 0%, rgba(59,46,37,0.05) 100%); }
 .hero-image { max-width: 100%; height: auto; margin-bottom: 20px; border: 2px solid var(--main-color); display: block; margin-left: auto; margin-right: auto; }
 .gothic-sub { font-family: var(--font-gothic); font-size: 3.5rem; line-height: 1; margin-bottom: 10px; }
@@ -82,7 +87,7 @@ body {
 /* --- HERO (HUBS) --- */
 .hub-hero { 
     position: relative; width: 100%; height: 350px; 
-    background-size: cover; background-position: top center; /* Foca no topo da imagem */
+    background-size: cover; background-position: top center; 
     border-bottom: 4px double var(--main-color); margin-bottom: 20px; 
     display: flex; align-items: center; justify-content: center; 
     box-shadow: inset 0 0 50px rgba(0,0,0,0.8);
@@ -95,6 +100,18 @@ body {
 .hub-card { border: 1px solid var(--dim-color); padding: 10px; display: flex; flex-direction: column; background: rgba(59, 46, 37, 0.05); transition: 0.2s; }
 .hub-card:hover { transform: translateY(-3px); box-shadow: 4px 4px 0 rgba(0,0,0,0.1); }
 .hub-card img { width: 100%; height: 180px; object-fit: cover; border: 1px solid var(--dim-color); margin-bottom: 10px; }
+
+/* --- CORREÇÃO DE IMAGENS NO CORPO DO TEXTO (PC) --- */
+.post-body img {
+    display: block !important;
+    margin: 20px auto !important;
+    max-width: 100% !important;
+    width: auto !important;
+    max-height: 500px !important; /* Trava altura no PC */
+    height: auto !important;
+    border: 1px solid var(--dim-color) !important;
+    background-color: #000;
+}
 
 /* --- TERMINAL HOME (Logs) --- */
 .system-logs { background: #050505; border: 4px double var(--main-color); padding: 20px; margin: 20px 0; }
@@ -140,132 +157,6 @@ body {
 #alerta-global.mostrar { transform: translateX(0); } /* Entra na tela */
 #alerta-global.erro { border-color: red; color: red; }
 
-* 1. Regra para PC (Desktop) */
-.post-body img {
-    display: block !important;          /* Transforma em bloco para centralizar */
-    margin: 20px auto !important;       /* Centraliza na tela */
-    
-    max-width: 100% !important;         /* Nunca deixa vazar para fora do texto */
-    
-    /* Aqui está o segredo para não ficar GIGANTE no PC: */
-    width: auto !important;             /* Usa o tamanho natural... */
-    max-height: 500px !important;       /* ...mas trava se passar de 500px de altura */
-    
-    height: auto !important;            /* Mantém a proporção */
-    border: 1px solid var(--dim-color) !important;
-    background-color: #000;
-}
-/* --- RESPONSIVIDADE (MOBILE) --- */
-/* --- RESPONSIVIDADE FINAL (MOBILE) --- */
-@media (max-width: 768px) {
-    
-    /* 1. Layout Geral em Coluna */
-    .main-content { 
-        grid-template-columns: 1fr !important; 
-        display: flex !important;
-        flex-direction: column !important;
-    }
-    
-    .sidebar { order: 2; }
-    .hub-content-wrapper { order: 1; }
-
-    /* 2. Header e Nav */
-    .main-header, .main-nav { 
-        flex-direction: column !important; 
-        text-align: center; 
-        gap: 10px; 
-    }
-    
-    .nav-item, .dropdown { 
-        width: 100% !important; 
-        border-bottom: 1px solid var(--bg-color); 
-        display: block !important;
-    }
-    
-    .dropbtn { padding: 15px !important; }
-    
-    .glitch-title { font-size: 3rem !important; }
-    .hub-title { font-size: 2.5rem !important; }
-
-    /* 3. CORREÇÃO DA NEWSLETTER (AQUI!) */
-    .newsletter-section {
-        padding: 15px !important;
-    }
-
-    .newsletter-content {
-        flex-direction: column !important; /* Força um em cima do outro */
-        flex-wrap: nowrap !important;
-        gap: 20px;
-    }
-
-    .newsletter-text, 
-    .newsletter-image {
-        width: 100% !important; /* Ocupa 100% da largura */
-        min-width: 0 !important; /* DESTRAVA a largura mínima */
-        flex: none !important; /* Remove comportamento flex complexo */
-        margin: 0 !important;
-    }
-
-    /* Ajuste do Formulário para não vazar a tela */
-    .retro-form {
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
-
-    .retro-form input, 
-    .retro-form button {
-        width: 100% !important;
-        max-width: 100% !important;
-        box-sizing: border-box !important; /* Garante que padding não estoure a tela */
-        margin-left: 0 !important;
-        margin-right: 0 !important;
-    }
-
-    /* 4. Dropdown Mobile */
-    .dropdown-content { 
-        position: relative; 
-        width: 100%; 
-        border: none; 
-        background: rgba(0,0,0,0.1); 
-        box-shadow: none; 
-    }
-    .dropdown:hover .dropdown-content { display: block; }
-    /* --- CORREÇÃO DE IMAGENS NOS POSTS (MOBILE) --- */
-    
-    /* 1. Imagem de Destaque (Topo do Post) */
-    figure.post-feature-image {
-        width: 100% !important;
-        margin: 10px 0 !important;
-        padding: 0 !important;
-        box-sizing: border-box !important;
-    }
-
-    figure.post-feature-image img {
-        width: 100% !important;
-        height: auto !important;
-    }
-
-    /* 2. Imagens dentro do Texto (Corpo do Post) */
-        .post-body img {
-    /* 3. Vídeos (Youtube) se houver */
-    .post-body iframe, 
-    .post-body video {
-        max-width: 100% !important;
-    }
-    /* --- CORREÇÃO DE IMAGENS MOBILE --- */
-    .post-body img {
-        /* No celular, queremos que ocupe a largura TOTAL para não ficar minusculo */
-        width: 100% !important;         
-        max-width: 100% !important;
-        
-        /* Removemos o limite de altura para não achatar a imagem esticada */
-        max-height: none !important;    
-        height: auto !important;
-        
-        margin: 15px 0 !important;
-    }
-}
-}
 /* --- CARROSSEL BIBLIOTECA --- */
 .carousel-section { margin-bottom: 50px; padding: 0 10px; }
 .carousel-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 15px; border-bottom: 2px solid var(--dim-color); padding-bottom: 5px; }
@@ -280,4 +171,41 @@ body {
 .lib-card h4 { font-family: var(--font-gothic); font-size: 1.2rem; height: 3rem; overflow: hidden; margin-bottom: 10px; }
 .lib-card a { display: block; text-align: center; background: var(--main-color); color: var(--bg-color); text-decoration: none; padding: 5px; font-family: var(--font-term); }
 .lib-card a:hover { background: transparent; color: var(--main-color); border: 1px solid var(--main-color); }
-.btn-retro.is-small { font-size: 1rem; padding: 5px 10px;}
+.btn-retro.is-small { font-size: 1rem; padding: 5px 10px; }
+
+/* =========================================
+   RESPONSIVIDADE (MOBILE)
+   ========================================= */
+@media (max-width: 768px) {
+    /* 1. Layout Coluna */
+    .main-content { grid-template-columns: 1fr !important; display: flex !important; flex-direction: column !important; }
+    .sidebar { order: 2; }
+    .hub-content-wrapper { order: 1; }
+
+    /* 2. Header e Nav */
+    .main-header, .main-nav { flex-direction: column !important; text-align: center; gap: 10px; }
+    .nav-item, .dropdown { width: 100% !important; border-bottom: 1px solid var(--bg-color); display: block !important; }
+    .dropbtn { padding: 15px !important; }
+    .glitch-title { font-size: 3rem !important; }
+    .hub-title { font-size: 2.5rem !important; }
+
+    /* 3. Newsletter Mobile Fix */
+    .newsletter-section { padding: 15px !important; }
+    .newsletter-content { flex-direction: column !important; flex-wrap: nowrap !important; gap: 20px; }
+    .newsletter-text, .newsletter-image { width: 100% !important; min-width: 0 !important; flex: none !important; margin: 0 !important; }
+    .retro-form { width: 100% !important; box-sizing: border-box !important; }
+    .retro-form input, .retro-form button { width: 100% !important; max-width: 100% !important; margin: 10px 0 !important; }
+
+    /* 4. Dropdown */
+    .dropdown-content { position: relative; width: 100%; border: none; background: rgba(0,0,0,0.1); box-shadow: none; }
+    .dropdown:hover .dropdown-content { display: block; }
+
+    /* 5. Imagens nos Posts (Mobile) */
+    .post-body img {
+        width: 100% !important;
+        max-width: 100% !important;
+        max-height: none !important;
+        height: auto !important;
+        margin: 15px 0 !important;
+    }
+}
