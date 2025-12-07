@@ -141,62 +141,80 @@ body {
 #alerta-global.erro { border-color: red; color: red; }
 
 /* --- RESPONSIVIDADE (MOBILE) --- */
+/* --- RESPONSIVIDADE FINAL (MOBILE) --- */
 @media (max-width: 768px) {
-    .main-content { grid-template-columns: 1fr; }
+    
+    /* 1. Layout Geral em Coluna */
+    .main-content { 
+        grid-template-columns: 1fr !important; 
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
     .sidebar { order: 2; }
     .hub-content-wrapper { order: 1; }
+
+    /* 2. Header e Nav */
+    .main-header, .main-nav { 
+        flex-direction: column !important; 
+        text-align: center; 
+        gap: 10px; 
+    }
     
-    .main-header, .main-nav { flex-direction: column; text-align: center; gap: 10px; }
-    .nav-item, .dropdown { width: 100%; border-bottom: 1px solid var(--bg-color); }
-    .dropbtn { padding: 10px; }
+    .nav-item, .dropdown { 
+        width: 100% !important; 
+        border-bottom: 1px solid var(--bg-color); 
+        display: block !important;
+    }
     
-    .glitch-title { font-size: 3rem; }
-    .hub-title { font-size: 2.5rem; }
+    .dropbtn { padding: 15px !important; }
     
-    /* Dropdown no celular empurra conteúdo */
-    .dropdown-content { position: relative; width: 100%; border: none; background: rgba(0,0,0,0.1); box-shadow: none; }
-    .dropdown:hover .dropdown-content { display: block; }
-    /* --- CORREÇÃO NEWSLETTER MOBILE --- */
+    .glitch-title { font-size: 3rem !important; }
+    .hub-title { font-size: 2.5rem !important; }
+
+    /* 3. CORREÇÃO DA NEWSLETTER (AQUI!) */
     .newsletter-section {
-        padding: 15px; /* Menos espaçamento interno */
-        margin-top: 20px;
+        padding: 15px !important;
     }
 
     .newsletter-content {
-        flex-direction: column; /* Empilha: Texto em cima, Imagem embaixo */
+        flex-direction: column !important; /* Força um em cima do outro */
+        flex-wrap: nowrap !important;
         gap: 20px;
     }
 
-    .newsletter-text {
-        width: 100%; /* Ocupa tudo */
-        min-width: auto; /* Remove a trava de 300px */
-        flex: 1;
-        text-align: center; /* Centraliza texto no mobile */
-    }
-
-    .newsletter-text h2 {
-        font-size: 2rem; /* Diminui o título gigante */
-    }
-
+    .newsletter-text, 
     .newsletter-image {
-        width: 100%;
-        min-width: auto;
-        justify-content: center;
-        margin-top: 10px;
+        width: 100% !important; /* Ocupa 100% da largura */
+        min-width: 0 !important; /* DESTRAVA a largura mínima */
+        flex: none !important; /* Remove comportamento flex complexo */
+        margin: 0 !important;
     }
 
-    /* Ajuste do Formulário no Mobile */
+    /* Ajuste do Formulário para não vazar a tela */
     .retro-form {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
-    
+
     .retro-form input, 
     .retro-form button {
-        width: 100%; /* Garante que o botão e input não vazem */
-        max-width: 100%;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important; /* Garante que padding não estoure a tela */
+        margin-left: 0 !important;
+        margin-right: 0 !important;
     }
+
+    /* 4. Dropdown Mobile */
+    .dropdown-content { 
+        position: relative; 
+        width: 100%; 
+        border: none; 
+        background: rgba(0,0,0,0.1); 
+        box-shadow: none; 
+    }
+    .dropdown:hover .dropdown-content { display: block; }
 }
 
 /* --- CARROSSEL BIBLIOTECA --- */
